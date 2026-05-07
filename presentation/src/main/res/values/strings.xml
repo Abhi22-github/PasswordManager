@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dashboard_card_copy">Copy password</string>
+    <string name="dashboard_card_more">More options</string>
+    <string name="copy_button_copied">Copied</string>
+    <string name="copy_button_copy">Copy</string>
+    <string name="save_button_label">Save</string>
+    <string name="password_info_edit">Edit password</string>
+    <string name="password_info_share">Share password</string>
+    <string name="password_info_delete">Delete password</string>
+    <string name="password_generator_new">New</string>
+    <string name="password_generator_save">Save</string>
+    <string name="password_generator_copy">Copy</string>
+    <string name="password_generator_copied">Copied</string>
+    <string name="overview_total_passwords">Total Password %1$d</string>
+    <string name="overview_stat_safe">Safe</string>
+    <string name="overview_stat_reused">Reused</string>
+    <string name="overview_stat_compromised">Compro</string>
+    <string name="overview_stat_weak">Weak</string>
+    <string name="password_strength_percent">%1$d%%</string>
+    <string name="password_input_show">Show password</string>
+    <string name="password_input_hide">Hide password</string>
+    <string name="toolbar_home">Home</string>
+    <string name="toolbar_generate">Generate</string>
+    <string name="toolbar_add_password">Add password</string>
+    <string name="dashboard_section_password_health">Password Health</string>
+    <string name="dashboard_section_domains">Domains</string>
+    <string name="dashboard_hero_keep">Keep</string>
+    <string name="dashboard_hero_your_life">Your Life</string>
+    <string name="dashboard_hero_safe">Safe</string>
+
+    <string name="bookmark_label_service">App/Site</string>
+    <string name="bookmark_label_username">Username/Email</string>
+    <string name="bookmark_label_password">Password</string>
+    <string name="bookmark_label_notes">Notes</string>
+    <string name="bookmark_placeholder_service">Gmail</string>
+    <string name="bookmark_placeholder_username">abc@gmail.com</string>
+    <string name="bookmark_placeholder_password">Password</string>
+    <string name="bookmark_placeholder_notes">Optional Notes</string>
+    <string name="bookmark_validation_error">Please enter valid data</string>
+    <string name="bookmark_record_saved_message">Password Added successfully</string>
+    <string name="bookmark_copy_password">Copy password</string>
+    <string name="bookmark_copied">Password copied</string>
+
+    <string name="generator_title">Generate Password</string>
+    <string name="generator_subtitle">Create a strong unique password tailored to your needs</string>
+    <string name="generator_length">Length of Password</string>
+    <string name="generator_include">Include</string>
+    <string name= "generator_character">Character</string>
+    <string name="generator_uppercase">Uppercase</string>
+    <string name="generator_digits">Digits</string>
+    <string name="generator_special_chars">Special Character</string>
+    <string name="generator_error">Something went wrong!</string>
+
+
+    <string name="editor_title_add">Add password</string>
+    <string name="editor_title_edit">Edit password</string>
+    <string name="editor_label_service">Service</string>
+    <string name="editor_label_username">Username/Email</string>
+    <string name="editor_label_password">Password</string>
+    <string name="editor_label_notes">Notes(Optional)</string>
+    <string name="editor_placeholder_service">Gmail</string>
+    <string name="editor_placeholder_username">abc@gmail.com</string>
+    <string name="editor_placeholder_password">Password</string>
+    <string name="editor_placeholder_notes">Add Note</string>
+    <string name="editor_copy_password">Copy password</string>
+    <string name="editor_copied">Password copied</string>
+</resources>
