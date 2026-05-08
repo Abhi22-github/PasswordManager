@@ -1,9 +1,11 @@
 package com.roaa.presentation.ui.components.appBar
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.size
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.roaa.presentation.R
@@ -11,6 +13,7 @@ import com.roaa.presentation.ui.components.buttons.CircleWhiteButton
 
 private val TopAppBarHeight: Dp = 64.dp
 private val FilledButtonSize = 48.dp
+private val margin_twelve = 12.dp
 
 @Composable
 fun DashBoardTopAppBar(
@@ -32,7 +35,8 @@ fun DashBoardTopAppBar(
 @Composable
 fun GeneralTopAppBar(
     modifier: Modifier = Modifier,
-    onBackButtonClicked: () -> Unit
+    onBackButtonClicked: () -> Unit,
+    title: String? = null
 ) {
     TopAppBarContainer(
         modifier = modifier,
@@ -43,6 +47,17 @@ fun GeneralTopAppBar(
             icon = R.drawable.back_icon,
             modifier = Modifier.size(FilledButtonSize)
         )
+        title?.let {
+            Spacer(modifier = Modifier.width(margin_twelve))
+            Text(
+                text = it,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }
 
@@ -72,5 +87,5 @@ private fun DashBoardTopAppBarPreview() {
 @Preview
 @Composable
 private fun GeneralTopAppBarPreview() {
-    GeneralTopAppBar(onBackButtonClicked = {})
+    GeneralTopAppBar(onBackButtonClicked = {}, title = "Add Password")
 }

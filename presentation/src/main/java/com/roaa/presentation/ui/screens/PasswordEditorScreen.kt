@@ -178,7 +178,7 @@ private fun PasswordEditorScreenContent(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            GeneralTopAppBar(onBackButtonClicked = onBackClick)
+            GeneralTopAppBar(onBackButtonClicked = onBackClick, title = title)
             Spacer(Modifier.height(SectionSpacing))
 
             Box {
