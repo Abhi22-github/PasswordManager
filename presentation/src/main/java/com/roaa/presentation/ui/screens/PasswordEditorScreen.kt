@@ -54,6 +54,7 @@ private val margin_eight = 8.dp
 private const val COPIED_FEEDBACK_DURATION_MS = 3000L
 private const val STRONG_PASSWORD_LENGTH = 16
 
+@Suppress("EffectKeys")
 @Composable
 fun PasswordEditorScreen(
     editingId: String?,
@@ -67,9 +68,12 @@ fun PasswordEditorScreen(
     val context = LocalContext.current
     val queryUiState by brandInfoViewModel.queryUiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(editingId, prefilledPassword) {
+    DisposableEffect(Unit) {
         passwordViewModel.resetEditorState()
         passwordViewModel.initialize(editingId, prefilledPassword)
+        onDispose {
+            passwordViewModel.resetEditorState()
+        }
     }
 
     val invalidFormMessage = stringResource(R.string.bookmark_validation_error)
