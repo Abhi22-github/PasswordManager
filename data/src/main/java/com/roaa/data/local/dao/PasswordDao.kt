@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PasswordDao {
 
-    @Query("SELECT * FROM passwords ORDER BY serviceName ASC")
+    @Query("SELECT * FROM passwords ORDER BY updatedAt DESC")
     fun getAll(): Flow<List<PasswordEntity>>
 
     @Query("SELECT * FROM passwords WHERE id = :id")
