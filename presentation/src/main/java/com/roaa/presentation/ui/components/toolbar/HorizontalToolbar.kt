@@ -1,31 +1,15 @@
 package com.roaa.presentation.ui.components.toolbar
 
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.FloatingToolbarDefaults
-import androidx.compose.material3.HorizontalFloatingToolbar
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,14 +33,20 @@ private data class ToolbarItem(
 private val ToolbarItems = listOf(
     ToolbarItem(
         state = BottomAppBarState.DashboardScreen,
-        outlineIcon = R.drawable.dashboard_outline_icon,
-        filledIcon = R.drawable.dashboard_filled_icon,
+        outlineIcon = R.drawable.home_outline_icon,
+        filledIcon = R.drawable.home_filled_icon,
         labelRes = R.string.toolbar_home
     ),
     ToolbarItem(
+        state = BottomAppBarState.HealthScreen,
+        outlineIcon = R.drawable.health_outline_icon,
+        filledIcon = R.drawable.health_filled_icon,
+        labelRes = R.string.toolbar_health
+    ),
+    ToolbarItem(
         state = BottomAppBarState.PasswordGeneratorScreen,
-        outlineIcon = R.drawable.key_outline_icon,
-        filledIcon = R.drawable.key_filled_icon,
+        outlineIcon = R.drawable.generate_outline_icon,
+        filledIcon = R.drawable.generate_filled_icon,
         labelRes = R.string.toolbar_generate
     )
 )
@@ -188,6 +178,17 @@ private fun HorizontalToolbarHomeSelectedPreview() {
         onAddPasswordClick = {}
     )
 }
+
+@Preview
+@Composable
+private fun HorizontalToolbarHealthSelectedPreview() {
+    HorizontalToolbar(
+        selectedAppBarScreen = BottomAppBarState.HealthScreen,
+        onSelectedAppBarScreenChange = {},
+        onAddPasswordClick = {}
+    )
+}
+
 
 @Preview
 @Composable

@@ -11,6 +11,8 @@ sealed interface Destinations : NavKey {
 
     @Serializable
     data class PasswordInfoScreen(val passwordId: String) : Destinations
+    @Serializable
+    data object PasswordHealthScreen : Destinations
 
     @Serializable
     data object PasswordGenerateScreen : Destinations

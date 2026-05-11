@@ -131,13 +131,9 @@ private fun String.random(random: SecureRandom): Char =
 
 enum class BottomAppBarState {
     DashboardScreen,
+    HealthScreen,
     PasswordGeneratorScreen,
-}
 
-enum class AppBarScreens {
-    DashboardScreen,
-    PasswordGeneratorScreen,
-    PasswordInfoScreen,
 }
 
 @Composable

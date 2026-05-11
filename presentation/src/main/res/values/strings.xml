@@ -21,6 +21,7 @@
     <string name="password_input_show">Show password</string>
     <string name="password_input_hide">Hide password</string>
     <string name="toolbar_home">Home</string>
+    <string name="toolbar_health">Health</string>
     <string name="toolbar_generate">Generate</string>
     <string name="toolbar_add_password">Add password</string>
     <string name="dashboard_section_password_health">Password Health</string>

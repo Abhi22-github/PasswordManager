@@ -19,6 +19,7 @@ import com.roaa.presentation.ui.components.toolbar.HorizontalToolbar
 import com.roaa.presentation.ui.screens.DashBoardScreen
 import com.roaa.presentation.ui.screens.PasswordEditorScreen
 import com.roaa.presentation.ui.screens.PasswordGenerateScreen
+import com.roaa.presentation.ui.screens.PasswordHealthScreen
 import com.roaa.presentation.ui.screens.PasswordInfoScreen
 import com.roaa.presentation.ui.theme.PasswordManagerTheme
 import com.roaa.presentation.utils.BottomAppBarState
@@ -166,6 +167,11 @@ fun AppNavDisplay(
                     }
                 )
             }
+            entry<Destinations.PasswordHealthScreen> { destination ->
+                PasswordHealthScreen(
+                    onBackClick = onBack,
+                )
+            }
             entry<Destinations.PasswordEditorScreen> { destination ->
                 PasswordEditorScreen(
                     editingId = destination.editingId,
@@ -199,6 +205,16 @@ private fun NavBackStack<NavKey>.syncBottomBarSelection(
             }
             if (lastOrNull() != Destinations.PasswordGenerateScreen) {
                 add(Destinations.PasswordGenerateScreen)
+            }
+        }
+
+        BottomAppBarState.HealthScreen -> {
+            // First go back to Dashboard root, then add PasswordGenerate
+            while (size > 1) {
+                removeLastOrNull()
+            }
+            if (lastOrNull() != Destinations.PasswordHealthScreen) {
+                add(Destinations.PasswordHealthScreen)
             }
         }
     }
