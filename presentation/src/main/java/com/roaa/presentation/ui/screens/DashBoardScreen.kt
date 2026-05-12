@@ -105,13 +105,13 @@ private fun DashBoardScreenContent(
             DashBoardTopAppBar()
         }
 
-        item(key = "hero") {
-            DashBoardHero()
-        }
-
-        item(key = "password_health_header") {
-            SectionHeader(text = stringResource(R.string.dashboard_section_password_health))
-        }
+//        item(key = "hero") {
+//            DashBoardHero()
+//        }
+//
+//        item(key = "password_health_header") {
+//            SectionHeader(text = stringResource(R.string.dashboard_section_password_health))
+//        }
 
         item(key = "password_health_card") {
 //            PasswordOverviewCard(
@@ -135,21 +135,21 @@ private fun DashBoardScreenContent(
 //                modifier = Modifier
 //            )
 //            Spacer(Modifier.height(10.dp))
-            PasswordHealthCard(
-                safe = 1,
-                weak = 4,
-                reused = 5,
-                compromised = 4,
-                modifier = Modifier
-            )
+//            PasswordHealthCard(
+//                safe = 1,
+//                weak = 4,
+//                reused = 5,
+//                compromised = 4,
+//                modifier = Modifier
+//            )
         }
 
-        item(key = "domains_header") {
-            SectionHeader(
-                text = stringResource(R.string.dashboard_section_domains),
-                modifier = Modifier.padding(top = SectionToHeaderSpacing)
-            )
-        }
+//        item(key = "domains_header") {
+//            SectionHeader(
+//                text = stringResource(R.string.dashboard_section_domains),
+//                modifier = Modifier.padding(top = SectionToHeaderSpacing)
+//            )
+//        }
 
         itemsIndexed(
             items = credentials,

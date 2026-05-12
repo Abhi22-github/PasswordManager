@@ -57,6 +57,7 @@ fun PasswordManageContent(modifier: Modifier = Modifier) {
     val selectedAppBarScreen by remember(backStack) {
         derivedStateOf {
             when (currentDestination) {
+                is Destinations.PasswordHealthScreen -> BottomAppBarState.HealthScreen
                 is Destinations.PasswordGenerateScreen -> BottomAppBarState.PasswordGeneratorScreen
                 else -> BottomAppBarState.DashboardScreen
             }
