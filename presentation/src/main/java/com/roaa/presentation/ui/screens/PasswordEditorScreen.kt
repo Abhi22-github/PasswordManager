@@ -30,15 +30,12 @@ import com.roaa.presentation.ui.components.buttons.*
 import com.roaa.presentation.ui.components.inputs.LabeledTextField
 import com.roaa.presentation.ui.components.popup.AutoCompletePopup
 import com.roaa.presentation.ui.components.progress.SegmentedStrengthMeter
+import com.roaa.presentation.ui.theme.ToolbarBottomGap
 import com.roaa.presentation.utils.*
 import com.roaa.presentation.utils.formEditor.EditorMode
 import com.roaa.presentation.utils.models.*
 import com.roaa.presentation.viewModels.*
 import kotlinx.coroutines.*
-
-
-private val ScreenHorizontalPadding = 16.dp
-private val ScreenVerticalPadding = 12.dp
 
 private val PasswordToStrengthSpacing = 13.dp
 private val NotesTopExtraSpacing = 6.dp
@@ -163,10 +160,6 @@ private fun PasswordEditorScreenContent(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(
-                horizontal = ScreenHorizontalPadding,
-                vertical = ScreenVerticalPadding
-            )
     ) {
         if (showSheet) {
             AppPickerBottomSheet(

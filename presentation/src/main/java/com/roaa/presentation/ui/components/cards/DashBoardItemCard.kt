@@ -24,11 +24,11 @@ import com.roaa.domain.model.*
 import com.roaa.presentation.R
 import com.roaa.presentation.ui.actions.DashBoardItemCardActions
 import com.roaa.presentation.ui.theme.AndroidGreen
+import com.roaa.presentation.ui.theme.CardInnerPadding
 import kotlinx.coroutines.delay
 import kotlin.math.*
 
 
-private val CardPadding = 12.dp
 private val AvatarSize = 36.dp
 private val ActionButtonSize = 36.dp
 private val ActionIconSize = 24.dp
@@ -53,7 +53,7 @@ fun DashBoardItemCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(CardPadding),
+                .padding(CardInnerPadding),
             verticalAlignment = Alignment.CenterVertically
         ) {
             ServiceAvatar(

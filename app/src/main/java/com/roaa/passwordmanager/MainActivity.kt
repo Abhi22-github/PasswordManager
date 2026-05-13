@@ -6,9 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.navigation3.runtime.*
@@ -16,14 +14,10 @@ import androidx.navigation3.ui.NavDisplay
 import com.roaa.passwordmanager.navigation.Destinations
 import com.roaa.presentation.ui.actions.DashboardActions
 import com.roaa.presentation.ui.components.toolbar.HorizontalToolbar
-import com.roaa.presentation.ui.screens.DashBoardScreen
-import com.roaa.presentation.ui.screens.PasswordEditorScreen
-import com.roaa.presentation.ui.screens.PasswordGenerateScreen
-import com.roaa.presentation.ui.screens.PasswordHealthScreen
-import com.roaa.presentation.ui.screens.PasswordInfoScreen
-import com.roaa.presentation.ui.theme.PasswordManagerTheme
+import com.roaa.presentation.ui.screens.*
+import com.roaa.presentation.ui.theme.*
+import com.roaa.presentation.utils.*
 import com.roaa.presentation.utils.BottomAppBarState
-import com.roaa.presentation.utils.rememberPasswordClipboard
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val NAV_TRANSITION_DURATION_MS = 300
@@ -116,6 +110,13 @@ fun AppNavDisplay(
     modifier: Modifier = Modifier
 ) {
 
+    val globalModifier = Modifier.padding(
+        start = ScreenStartPadding,
+        end = ScreenEndPadding,
+        top = ScreenTopPadding,
+        bottom = ScreenBottomPadding
+    )
+
     val fadeSpec = remember {
         fadeIn(tween(NAV_TRANSITION_DURATION_MS)) togetherWith fadeOut(
             tween(
@@ -135,6 +136,7 @@ fun AppNavDisplay(
         entryProvider = entryProvider {
             entry<Destinations.DashBoardScreen> {
                 DashBoardScreen(
+                    modifier = globalModifier,
                     onAction = { action ->
                         when (action) {
                             is DashboardActions.OnCardClicked -> {
@@ -158,19 +160,22 @@ fun AppNavDisplay(
                     passwordId = destination.passwordId,
                     onEditClick = { passwordId ->
                         backStack.add(Destinations.PasswordEditorScreen(editingId = passwordId))
-                    }
+                    },
+                    modifier = globalModifier
                 )
             }
             entry<Destinations.PasswordGenerateScreen> {
                 PasswordGenerateScreen(
                     onNavigateToAddPassword = { password ->
                         backStack.add(Destinations.PasswordEditorScreen(prefilledPassword = password))
-                    }
+                    },
+                    modifier = globalModifier
                 )
             }
             entry<Destinations.PasswordHealthScreen> { destination ->
                 PasswordHealthScreen(
                     onBackClick = onBack,
+                    modifier = globalModifier
                 )
             }
             entry<Destinations.PasswordEditorScreen> { destination ->
@@ -178,6 +183,7 @@ fun AppNavDisplay(
                     editingId = destination.editingId,
                     onBackClick = onBack,
                     prefilledPassword = destination.prefilledPassword,
+                    modifier = globalModifier
                 )
             }
         }

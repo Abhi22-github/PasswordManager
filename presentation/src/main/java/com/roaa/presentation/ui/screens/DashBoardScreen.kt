@@ -52,18 +52,18 @@ import com.roaa.presentation.ui.actions.DashBoardItemCardActions
 import com.roaa.presentation.ui.actions.DashboardActions
 import com.roaa.presentation.ui.components.appBar.DashBoardTopAppBar
 import com.roaa.presentation.ui.components.cards.DashBoardItemCard
+import com.roaa.presentation.ui.theme.ToolbarBottomGap
+import com.roaa.presentation.ui.theme.VerticalSpacingInConnectedCards
 import com.roaa.presentation.utils.models.PasswordStats
 import com.roaa.presentation.viewModels.DashboardViewModel
 import com.roaa.presentation.viewModels.PasswordViewModel
 
-private val ScreenHorizontalPadding = 12.dp
 private val SectionSpacing = 12.dp
-private val ItemSpacing = 4.dp
+
 private val SectionToHeaderSpacing = 6.dp
-val ToolbarBottomGap = 84.dp
 private val HeroIconSize = 64.dp
 private val HeroTextSize = 52.sp
-private val CardCornerRadius = 16.dp
+private val CardCornerRadius = 20.dp
 
 @Composable
 fun DashBoardScreen(
@@ -97,9 +97,8 @@ private fun DashBoardScreenContent(
     LazyColumn(
         state = listState,
         modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = ScreenHorizontalPadding),
-        verticalArrangement = Arrangement.spacedBy(ItemSpacing)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(VerticalSpacingInConnectedCards)
     ) {
         item(key = "top_app_bar") {
             DashBoardTopAppBar()
