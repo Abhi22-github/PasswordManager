@@ -59,7 +59,6 @@ import com.roaa.presentation.viewModels.DashboardViewModel
 import com.roaa.presentation.viewModels.PasswordViewModel
 
 private val SectionSpacing = 12.dp
-
 private val SectionToHeaderSpacing = 6.dp
 private val HeroIconSize = 64.dp
 private val HeroTextSize = 52.sp
