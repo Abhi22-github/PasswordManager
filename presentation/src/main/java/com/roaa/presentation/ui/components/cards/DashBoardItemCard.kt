@@ -180,7 +180,7 @@ private fun ServiceLabel(
         Text(
             text = username,
             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )

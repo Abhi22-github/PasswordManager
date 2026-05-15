@@ -8,7 +8,7 @@ import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-class PasswordManagerApp : Application(), SingletonImageLoader.Factory{
+class KlefApp : Application(), SingletonImageLoader.Factory{
     @Inject lateinit var imageLoader: ImageLoader
 
     override fun newImageLoader(context: PlatformContext): ImageLoader = imageLoader

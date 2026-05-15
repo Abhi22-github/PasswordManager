@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "com.roaa.passwordmanager"
+    namespace = "com.roaa.klef"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.roaa.passwordmanager"
+        applicationId = "com.roaa.klef"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
