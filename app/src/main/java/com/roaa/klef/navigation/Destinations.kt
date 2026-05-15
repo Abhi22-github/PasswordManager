@@ -1,4 +1,4 @@
-package com.roaa.passwordmanager.navigation
+package com.roaa.klef.navigation
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable

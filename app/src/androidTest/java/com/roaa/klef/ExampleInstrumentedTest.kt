@@ -1,4 +1,4 @@
-package com.roaa.passwordmanager
+package com.roaa.klef
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

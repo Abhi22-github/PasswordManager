@@ -1,4 +1,4 @@
-package com.roaa.passwordmanager
+package com.roaa.klef
 
 import org.junit.Test
 

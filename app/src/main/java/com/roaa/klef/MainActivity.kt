@@ -1,4 +1,4 @@
-package com.roaa.passwordmanager
+package com.roaa.klef
 
 import android.os.Bundle
 import androidx.activity.*
@@ -11,7 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.navigation3.runtime.*
 import androidx.navigation3.ui.NavDisplay
-import com.roaa.passwordmanager.navigation.Destinations
+import com.roaa.klef.navigation.Destinations
 import com.roaa.presentation.ui.actions.DashboardActions
 import com.roaa.presentation.ui.components.toolbar.HorizontalToolbar
 import com.roaa.presentation.ui.screens.*
