@@ -266,9 +266,10 @@ fun PasswordManagerTheme(
     val colorScheme = when {
         // Use material-kolor with system seed on Android 12+
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val seedColor = Color(
-                ContextCompat.getColor(context, android.R.color.system_accent1_500)
-            )
+//            val seedColor = Color(
+//                ContextCompat.getColor(context, android.R.color.system_accent1_500)
+//            )
+            val seedColor = blue
             dynamicColorScheme(
                 seedColor = seedColor,
                 isDark = darkTheme,
