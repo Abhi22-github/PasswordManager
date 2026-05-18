@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
-class DashboardViewModel @Inject constructor(
+class PasswordStatViewModel @Inject constructor(
     private val getTotalPasswordCountUseCase: GetTotalPasswordCountUseCase,
     private val getReusedPasswordCountUseCase: GetReusedPasswordCountUseCase,
     private val getWeakPasswordCountUseCase: GetWeakPasswordCountUseCase,
