@@ -19,3 +19,9 @@ val GlobalCardRadius = 20.dp
 // Dashboard Screen
 
 // Password Health Screen
+
+// General Dimensions
+val SixteenDp = 16.dp
+val EightDp = 8.dp
+val StandardCircle = 48.dp
+val ZeroDp = 0.dp

@@ -1,5 +1,6 @@
 package com.roaa.presentation.ui.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 
 val AndroidGreen = Color(0xFF3DDC84)
@@ -18,6 +19,18 @@ val compromiseColor = Color(0xFF7689D7)
 val weakColor = Color(0xFFE58D8E)
 val statCardBackground = Color(0xFF1F294F)
 val customTextColor = Color(0xFF4E4E4E)
+
+val ColorScheme.warning: Color
+    get() = Color(0xFFE65100) // Orange 900 - deeper amber/orange
+
+val ColorScheme.onWarning: Color
+    get() = Color.White
+
+val ColorScheme.warningContainer: Color
+    get() = Color(0xFFFFCC80) // Orange 200 - muted container
+
+val ColorScheme.onWarningContainer: Color
+    get() = Color(0xFF3E2723)
 
 val poorColor = Color(0xFFE53935)
 val averageColor = Color(0xFFFB8C00)

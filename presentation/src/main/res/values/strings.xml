@@ -66,4 +66,8 @@
     <string name="editor_placeholder_notes">Add Note</string>
     <string name="editor_copy_password">Copy password</string>
     <string name="editor_copied">Password copied</string>
+
+    <string name="health_card_create_strong_password">Create Strong Password</string>
+    <string name="health_card_create_unique_password">Create Unique Password</string>
+    <string name="health_card_change_password_message">You should Change this now</string>
 </resources>

@@ -55,7 +55,7 @@ import com.roaa.presentation.ui.components.cards.DashBoardItemCard
 import com.roaa.presentation.ui.theme.ToolbarBottomGap
 import com.roaa.presentation.ui.theme.VerticalSpacingInConnectedCards
 import com.roaa.presentation.utils.models.PasswordStats
-import com.roaa.presentation.viewModels.DashboardViewModel
+import com.roaa.presentation.viewModels.PasswordStatViewModel
 import com.roaa.presentation.viewModels.PasswordViewModel
 
 private val SectionSpacing = 12.dp
@@ -69,7 +69,7 @@ fun DashBoardScreen(
     onAction: (DashboardActions) -> Unit,
     modifier: Modifier = Modifier,
     passwordViewModel: PasswordViewModel = hiltViewModel(),
-    dashboardViewModel: DashboardViewModel = hiltViewModel()
+    dashboardViewModel: PasswordStatViewModel = hiltViewModel()
 
 ) {
     val passwords by passwordViewModel.allPasswords.collectAsStateWithLifecycle()
