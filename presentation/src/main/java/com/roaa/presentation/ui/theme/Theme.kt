@@ -2,16 +2,12 @@ package com.roaa.presentation.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
-import com.materialkolor.dynamicColorScheme
+import com.materialkolor.*
 
 
 private val lightScheme = lightColorScheme(
@@ -273,13 +269,14 @@ fun PasswordManagerTheme(
             dynamicColorScheme(
                 seedColor = seedColor,
                 isDark = darkTheme,
-                isAmoled = false
+                isAmoled = false,
+                style = PaletteStyle.TonalSpot,
             )
         }
 
         // Fallback for pre-Android 12 or when dynamic color is disabled
         else -> {
-            val fallbackSeed = Color(0xFF6750A4)
+            val fallbackSeed = blue
             dynamicColorScheme(
                 seedColor = fallbackSeed,
                 isDark = darkTheme,

@@ -1,6 +1,6 @@
 package com.roaa.presentation.ui.screens
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -10,11 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.*
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.roaa.presentation.ui.components.appBar.DashBoardTopAppBar
 import com.roaa.presentation.ui.theme.*
 import com.roaa.presentation.utils.models.PasswordStats
 import com.roaa.presentation.viewModels.PasswordStatViewModel
@@ -38,6 +40,14 @@ fun PasswordHealthScreenContent(modifier: Modifier = Modifier, passwordStats: Pa
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(VerticalSpacingInConnectedCards)
     ) {
+        DashBoardTopAppBar()
+        Spacer(modifier = Modifier.height(EightDp))
+        Image(
+            painter = painterResource(com.roaa.presentation.R.drawable.password_illustration),
+            contentDescription = "",
+            modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp)
+        )
+        Spacer(modifier = Modifier.height(SixteenDp))
         PasswordHealthItemCard(
             cardShape = RoundedCornerShape(topEnd = GlobalCardRadius, topStart = GlobalCardRadius),
             iconBackgroundColor = MaterialTheme.colorScheme.errorContainer,
@@ -101,7 +111,7 @@ fun PasswordHealthItemCard(
                     )
                     Text(
                         text = cardSubTitle,
-                        style = MaterialTheme.typography.titleSmall,
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f),
                     )
                 }
@@ -134,7 +144,7 @@ fun GenericCardContainer(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .padding(CardInnerPadding),
+                .padding(SixteenDp),
         ) {
             content()
         }
