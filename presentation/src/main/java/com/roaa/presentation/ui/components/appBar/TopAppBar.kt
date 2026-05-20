@@ -28,7 +28,6 @@ fun DashBoardTopAppBar(
         Image(
             painter = painterResource(R.drawable.klef_icon),
             contentDescription = "",
-            modifier = Modifier.size(FilledButtonSize)
         )
         CircleWhiteButton(
             onClick = onSettingsClick,

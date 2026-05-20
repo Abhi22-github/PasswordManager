@@ -177,6 +177,7 @@ private fun ServiceLabel(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
+        if(false)
         Text(
             text = username,
             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
