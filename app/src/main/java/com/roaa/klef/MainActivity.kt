@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation3.runtime.*
 import androidx.navigation3.ui.NavDisplay
 import com.roaa.klef.navigation.Destinations
@@ -23,17 +27,88 @@ import dagger.hilt.android.AndroidEntryPoint
 private const val NAV_TRANSITION_DURATION_MS = 300
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     @OptIn(ExperimentalMaterial3ExpressiveApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             PasswordManagerTheme {
-                PasswordManageContent()
-
+                AuthenticatedContent(activity = this@MainActivity)
             }
         }
+    }
+}
+
+@Composable
+fun AuthenticatedContent(activity: FragmentActivity, modifier: Modifier = Modifier) {
+    var isAuthenticated by remember { mutableStateOf(false) }
+    var showPopup by remember { mutableStateOf(false) }
+    var authError by remember { mutableStateOf<String?>(null) }
+    val biometricManager = remember { BiometricPromptManager(activity) }
+
+    fun authenticate() {
+        showPopup = false
+        biometricManager.showPrompt { result ->
+            when (result) {
+                BiometricPromptManager.BiometricResult.Success -> {
+                    isAuthenticated = true
+                    showPopup = false
+                    authError = null
+                }
+                BiometricPromptManager.BiometricResult.NotAvailable,
+                BiometricPromptManager.BiometricResult.NotEnrolled -> {
+                    isAuthenticated = true
+                }
+                is BiometricPromptManager.BiometricResult.Error -> {
+                    showPopup = true
+                    authError = result.message
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) { authenticate() }
+
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_STOP -> {
+                    if (!activity.isChangingConfigurations) {
+                        isAuthenticated = false
+                        showPopup = false
+                    }
+                }
+                Lifecycle.Event.ON_RESUME -> {
+                    if (!isAuthenticated) authenticate()
+                }
+                else -> Unit
+            }
+        }
+        lifecycle.addObserver(observer)
+        onDispose { lifecycle.removeObserver(observer) }
+    }
+
+    Box(modifier = modifier.fillMaxSize()) {
+        AnimatedContent(
+            targetState = isAuthenticated,
+            transitionSpec = { fadeIn(tween(500)) togetherWith fadeOut(tween(300)) },
+            label = "SplashToDashboard"
+        ) { authenticated ->
+            if (authenticated) {
+                PasswordManageContent()
+            } else {
+                SplashScreen()
+            }
+        }
+
+        // Popup floats over whatever is behind (splash on first open, dashboard on re-lock)
+        BiometricAuthPopup(
+            visible = !isAuthenticated && showPopup,
+            onUnlockClick = ::authenticate,
+            errorMessage = authError
+        )
     }
 }
 
