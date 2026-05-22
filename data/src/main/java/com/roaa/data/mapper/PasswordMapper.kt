@@ -1,19 +1,16 @@
 package com.roaa.data.mapper
 
+import com.roaa.data.local.PasswordEncryptor
 import com.roaa.data.local.entity.PasswordEntity
 import com.roaa.domain.model.Credentials
 
-/**
- * Converts a Room entity to its domain model.
- * Used when reading from the database.
- */
-fun PasswordEntity.toDomain(): Credentials = Credentials(
+fun PasswordEntity.toDomain(encryptor: PasswordEncryptor): Credentials = Credentials(
     id = id,
     serviceName = serviceName,
     domainName = domainName,
     logoUrl = logoUrl,
     username = username,
-    password = password,
+    password = encryptor.decrypt(password),
     websiteUrl = websiteUrl,
     notes = notes,
     strength = strength,
@@ -22,17 +19,13 @@ fun PasswordEntity.toDomain(): Credentials = Credentials(
     serviceType = serviceType
 )
 
-/**
- * Converts a domain model to its Room entity.
- * Used when writing to the database.
- */
-fun Credentials.toEntity(): PasswordEntity = PasswordEntity(
+fun Credentials.toEntity(encryptor: PasswordEncryptor): PasswordEntity = PasswordEntity(
     id = id,
     serviceName = serviceName,
     domainName = domainName,
     username = username,
     logoUrl = logoUrl,
-    password = password,
+    password = encryptor.encrypt(password),
     websiteUrl = websiteUrl,
     notes = notes,
     strength = strength,
@@ -41,8 +34,5 @@ fun Credentials.toEntity(): PasswordEntity = PasswordEntity(
     serviceType = serviceType
 )
 
-/**
- * Converts a list of entities to a list of domain models.
- * Convenience extension for Flow<List<PasswordEntity>>.map { it.toDomainList() }
- */
-fun List<PasswordEntity>.toDomainList(): List<Credentials> = map { it.toDomain() }
+fun List<PasswordEntity>.toDomainList(encryptor: PasswordEncryptor): List<Credentials> =
+    map { it.toDomain(encryptor) }
