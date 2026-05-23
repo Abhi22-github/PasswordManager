@@ -225,6 +225,10 @@ fun AppNavDisplay(
                             is DashboardActions.OnMoreClicked -> {
                                 // TODO
                             }
+
+                            DashboardActions.OnAddPasswordClick -> {
+                                backStack.add(Destinations.PasswordEditorScreen())
+                            }
                         }
                     }
                 )

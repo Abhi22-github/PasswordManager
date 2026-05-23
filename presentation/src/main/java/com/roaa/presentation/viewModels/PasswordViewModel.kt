@@ -59,14 +59,12 @@ class PasswordViewModel @Inject constructor(
     /**
      * Get all password list from database.
      */
-    val allPasswords: StateFlow<List<Credentials>> = getAllPasswords()
-        .map { list ->
-            list.map { it }
-        }
+    // null = still loading, emptyList = loaded but no entries, non-empty = has entries
+    val allPasswords: StateFlow<List<Credentials>?> = getAllPasswords()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
+            initialValue = null
         )
 
 

@@ -16,4 +16,5 @@ sealed interface DashboardActions {
     data class OnCardClicked(val passwordId: String) : DashboardActions
     data class OnCopyClicked(val password: String) : DashboardActions
     data class OnMoreClicked(val cardId: String) : DashboardActions
+    data object OnAddPasswordClick : DashboardActions
 }

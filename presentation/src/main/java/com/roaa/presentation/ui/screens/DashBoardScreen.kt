@@ -1,6 +1,8 @@
 package com.roaa.presentation.ui.screens
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -19,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.airbnb.lottie.compose.*
 import com.roaa.domain.model.Credentials
 import com.roaa.presentation.R
 import com.roaa.presentation.ui.actions.*
@@ -41,9 +44,8 @@ fun DashBoardScreen(
     dashboardViewModel: PasswordStatViewModel = hiltViewModel()
 
 ) {
-    val passwords by passwordViewModel.allPasswords.collectAsStateWithLifecycle()
+    val passwords: List<Credentials>? by passwordViewModel.allPasswords.collectAsStateWithLifecycle()
     val passwordStats by dashboardViewModel.passwordStat.collectAsStateWithLifecycle()
-
 
     DashBoardScreenContent(
         credentials = passwords,
@@ -55,101 +57,107 @@ fun DashBoardScreen(
 
 @Composable
 private fun DashBoardScreenContent(
-    credentials: List<Credentials>,
+    credentials: List<Credentials>?,
     stats: PasswordStats,
     onAction: (DashboardActions) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
 
-    LazyColumn(
-        state = listState,
-        modifier = modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(VerticalSpacingInConnectedCards)
-    ) {
-        item(key = "top_app_bar") {
-            DashBoardTopAppBar()
-            Spacer(modifier = Modifier.height(EightDp))
-        }
+    Column(modifier = modifier.fillMaxSize()) {
+        DashBoardTopAppBar()
+        Spacer(modifier = Modifier.height(EightDp))
 
-//        item(key = "hero") {
-//            DashBoardHero()
-//        }
-//
-//        item(key = "password_health_header") {
-//            SectionHeader(text = stringResource(R.string.dashboard_section_password_health))
-//        }
+        // null = loading (show nothing), true = empty, false = has items
+        AnimatedContent(
+            targetState = credentials?.isEmpty(),
+            transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(200)) },
+            modifier = Modifier.weight(1f),
+            label = "EmptyVsList"
+        ) { isEmpty ->
+            if (isEmpty == true) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        EmptyScreenAnimation()
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = "No passwords added",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Spacer(Modifier.height(16.dp))
+                        Button(onClick = { onAction(DashboardActions.OnAddPasswordClick) }) {
+                            Text(
+                                text = "Add Password",
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
+                }
+            } else if (isEmpty == false) {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(VerticalSpacingInConnectedCards),
+                    contentPadding = PaddingValues(bottom = ToolbarBottomGap)
+                ) {
+                    itemsIndexed(
+                        items = credentials.orEmpty(),
+                        key = { _, item -> item.id }
+                    ) { index, item ->
+                        credentials?.let {
+                            val shape = when {
+                                credentials.size == 1 -> RoundedCornerShape(CardCornerRadius)
+                                index == 0 -> RoundedCornerShape(
+                                    topStart = CardCornerRadius,
+                                    topEnd = CardCornerRadius
+                                )
 
-        item(key = "password_health_card") {
-//            PasswordOverviewCard(
-//                stats = stats,
-//                onClick = { /* TODO: navigate to password health detail */ }
-//            )
-//            Spacer(Modifier.height(10.dp))
-//            PasswordHealthScoreCard(
-//                safe = 1,
-//                weak = 4,
-//                reused = 5,
-//                compromised =4,
-//                modifier = Modifier
-//            )
-//            Spacer(Modifier.height(10.dp))
-//            PasswordHealthCardDonut(
-//                safe = 1,
-//                weak = 4,
-//                reused = 5,
-//                compromised =4,
-//                modifier = Modifier
-//            )
-//            Spacer(Modifier.height(10.dp))
-//            PasswordHealthCard(
-//                safe = 1,
-//                weak = 4,
-//                reused = 5,
-//                compromised = 4,
-//                modifier = Modifier
-//            )
-        }
+                                index == credentials.lastIndex -> RoundedCornerShape(
+                                    bottomStart = CardCornerRadius,
+                                    bottomEnd = CardCornerRadius
+                                )
 
-//        item(key = "domains_header") {
-//            SectionHeader(
-//                text = stringResource(R.string.dashboard_section_domains),
-//                modifier = Modifier.padding(top = SectionToHeaderSpacing)
-//            )
-//        }
-
-        itemsIndexed(
-            items = credentials,
-            key = { _, item -> item.id }
-        ) { index, items ->
-            val shape = when {
-                credentials.size == 1 -> RoundedCornerShape(CardCornerRadius)
-                index == 0 -> RoundedCornerShape(
-                    topStart = CardCornerRadius,
-                    topEnd = CardCornerRadius
-                )
-
-                index == credentials.lastIndex -> RoundedCornerShape(
-                    bottomStart = CardCornerRadius,
-                    bottomEnd = CardCornerRadius
-                )
-
-                else -> RectangleShape
+                                else -> RectangleShape
+                            }
+                            DashBoardItemCard(
+                                modifier = Modifier.animateItem(),
+                                shape = shape,
+                                credentialsItem = item,
+                                onAction = { action -> handleItemCardAction(action, onAction) }
+                            )
+                        }
+                    }
+                }
             }
-            DashBoardItemCard(
-                modifier = Modifier.animateItem(),
-                shape = shape,
-                credentialsItem = items,
-                onAction = { action -> handleItemCardAction(action, onAction) }
-            )
-        }
-
-        item(key = "bottom_spacer") {
-            Spacer(Modifier.height(ToolbarBottomGap))
         }
     }
 }
+
+@Composable
+fun EmptyScreenAnimation() {
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.empty_status)
+    )
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever // or a fixed count
+    )
+
+    LottieAnimation(
+        composition = composition,
+        progress = { progress },
+        modifier = Modifier.size(200.dp)
+    )
+}
+
 
 @Composable
 fun PasswordHealthCard(
@@ -622,7 +630,7 @@ private val PLACEHOLDER_STATS = PasswordStats(
 @Composable
 private fun DashBoardScreenContentPreview() {
     DashBoardScreenContent(
-        credentials = emptyList(),
+        credentials = emptyList<Credentials>(),
         stats = PLACEHOLDER_STATS,
         onAction = {}
     )

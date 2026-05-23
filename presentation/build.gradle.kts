@@ -76,6 +76,8 @@ dependencies {
 
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.material.kolor)
+
+    implementation(libs.lottie.compose)
 }
 
 kapt {
