@@ -115,7 +115,7 @@ private fun ServiceAvatar(
                 modifier = modifier
                     .size(AvatarSize)
                     .clip(CircleShape),
-                model = request,
+                model = if(image.isNullOrEmpty()) R.drawable.website_icon else request,
                 contentDescription = contentDescription,
                 contentScale = ContentScale.Fit,
                 colorFilter = null
@@ -223,6 +223,7 @@ private fun CardActions(
                 }
             )
         }
+        if(false)
         CardActionButton(
             iconRes = R.drawable.more_vert_icon,
             contentDescription = stringResource(R.string.dashboard_card_more),
