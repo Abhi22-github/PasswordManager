@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.*
@@ -59,23 +60,29 @@ fun HorizontalToolbar(
     onAddPasswordClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    HorizontalFloatingToolbar(
-        expanded = true,
-        modifier = modifier,
-        floatingActionButton = {
-            AddPasswordFab(onClick = onAddPasswordClick)
-        },
-        colors = FloatingToolbarDefaults.standardFloatingToolbarColors(
-            toolbarContainerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
-        contentPadding = PaddingValues(ToolbarContentPadding)
+    Column(
+        modifier = modifier.wrapContentSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        ToolbarItems.forEach { item ->
-            ToolbarButton(
-                item = item,
-                isSelected = selectedAppBarScreen == item.state,
-                onClick = { onSelectedAppBarScreenChange(item.state) }
-            )
+        HorizontalFloatingToolbar(
+            expanded = true,
+            colors = FloatingToolbarDefaults.standardFloatingToolbarColors(
+                toolbarContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest
+            ),
+            floatingActionButton = {
+                AddPasswordFab(onClick = onAddPasswordClick,modifier = Modifier.size(64.dp))
+            },
+            collapsedShadowElevation =  FloatingToolbarDefaults.ContainerExpandedElevationWithFab,
+            contentPadding = PaddingValues(ToolbarContentPadding)
+        ) {
+            ToolbarItems.forEach { item ->
+                ToolbarButton(
+                    item = item,
+                    isSelected = selectedAppBarScreen == item.state,
+                    onClick = { onSelectedAppBarScreenChange(item.state) }
+                )
+            }
         }
     }
 }
@@ -89,12 +96,12 @@ private fun AddPasswordFab(
     FloatingToolbarDefaults.VibrantFloatingActionButton(
         onClick = onClick,
         modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.primary
+        containerColor = MaterialTheme.colorScheme.primaryContainer
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.add_icon),
             contentDescription = stringResource(R.string.toolbar_add_password),
-            tint = MaterialTheme.colorScheme.onPrimary
+            tint = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
 }
@@ -110,7 +117,7 @@ private fun ToolbarButton(
         targetValue = if (isSelected) {
             MaterialTheme.colorScheme.primaryContainer
         } else {
-            MaterialTheme.colorScheme.surfaceContainer
+            MaterialTheme.colorScheme.surfaceContainerLowest
         },
         animationSpec = tween(COLOR_ANIM_DURATION_MS),
         label = "ToolbarContainerColor"

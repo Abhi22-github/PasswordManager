@@ -270,7 +270,6 @@ fun PasswordManagerTheme(
                 seedColor = seedColor,
                 isDark = darkTheme,
                 isAmoled = false,
-                style = PaletteStyle.TonalSpot,
             )
         }
 

@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
@@ -42,7 +43,7 @@ class MainActivity : FragmentActivity() {
 
 @Composable
 fun AuthenticatedContent(activity: FragmentActivity, modifier: Modifier = Modifier) {
-    var isAuthenticated by remember { mutableStateOf(false) }
+    var isAuthenticated by rememberSaveable { mutableStateOf(false) }
     var showPopup by remember { mutableStateOf(false) }
     var authError by remember { mutableStateOf<String?>(null) }
     val biometricManager = remember { BiometricPromptManager(activity) }
@@ -77,7 +78,6 @@ fun AuthenticatedContent(activity: FragmentActivity, modifier: Modifier = Modifi
                 Lifecycle.Event.ON_STOP -> {
                     if (!activity.isChangingConfigurations) {
                         isAuthenticated = false
-                        showPopup = false
                     }
                 }
                 Lifecycle.Event.ON_RESUME -> {
