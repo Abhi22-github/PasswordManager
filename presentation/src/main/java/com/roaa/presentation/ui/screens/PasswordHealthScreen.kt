@@ -43,7 +43,7 @@ fun PasswordHealthScreenContent(modifier: Modifier = Modifier, passwordStats: Pa
         DashBoardTopAppBar()
         Spacer(modifier = Modifier.height(EightDp))
         Image(
-            painter = painterResource(com.roaa.presentation.R.drawable.password_illustration),
+            painter = painterResource(com.roaa.presentation.R.drawable.illustration_password_health),
             contentDescription = "",
             modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp)
         )

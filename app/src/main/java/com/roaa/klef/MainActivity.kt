@@ -1,5 +1,6 @@
 package com.roaa.klef
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.*
 import androidx.activity.compose.setContent
@@ -43,6 +44,9 @@ class MainActivity : FragmentActivity() {
 
 @Composable
 fun AuthenticatedContent(activity: FragmentActivity, modifier: Modifier = Modifier) {
+    val prefs = remember { activity.getSharedPreferences("klef_prefs", Context.MODE_PRIVATE) }
+    var hasSeenOnboarding by remember { mutableStateOf(prefs.getBoolean("has_seen_onboarding", false)) }
+
     var isAuthenticated by rememberSaveable { mutableStateOf(false) }
     var showPopup by remember { mutableStateOf(false) }
     var authError by remember { mutableStateOf<String?>(null) }
@@ -69,7 +73,10 @@ fun AuthenticatedContent(activity: FragmentActivity, modifier: Modifier = Modifi
         }
     }
 
-    LaunchedEffect(Unit) { authenticate() }
+    // Only trigger auth once onboarding is done and user isn't already authenticated
+    LaunchedEffect(hasSeenOnboarding) {
+        if (hasSeenOnboarding && !isAuthenticated) authenticate()
+    }
 
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     DisposableEffect(lifecycle) {
@@ -81,7 +88,7 @@ fun AuthenticatedContent(activity: FragmentActivity, modifier: Modifier = Modifi
                     }
                 }
                 Lifecycle.Event.ON_RESUME -> {
-                    if (!isAuthenticated) authenticate()
+                    if (hasSeenOnboarding && !isAuthenticated) authenticate()
                 }
                 else -> Unit
             }
@@ -91,24 +98,33 @@ fun AuthenticatedContent(activity: FragmentActivity, modifier: Modifier = Modifi
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-        AnimatedContent(
-            targetState = isAuthenticated,
-            transitionSpec = { fadeIn(tween(500)) togetherWith fadeOut(tween(300)) },
-            label = "SplashToDashboard"
-        ) { authenticated ->
-            if (authenticated) {
-                PasswordManageContent()
-            } else {
-                SplashScreen()
+        if (!hasSeenOnboarding) {
+            OnboardingScreen(
+                onComplete = {
+                    prefs.edit().putBoolean("has_seen_onboarding", true).apply()
+                    hasSeenOnboarding = true
+                }
+            )
+        } else {
+            AnimatedContent(
+                targetState = isAuthenticated,
+                transitionSpec = { fadeIn(tween(500)) togetherWith fadeOut(tween(300)) },
+                label = "SplashToDashboard"
+            ) { authenticated ->
+                if (authenticated) {
+                    PasswordManageContent()
+                } else {
+                    SplashScreen()
+                }
             }
-        }
 
-        // Popup floats over whatever is behind (splash on first open, dashboard on re-lock)
-        BiometricAuthPopup(
-            visible = !isAuthenticated && showPopup,
-            onUnlockClick = ::authenticate,
-            errorMessage = authError
-        )
+            // Popup floats over whatever is behind (splash on first open, dashboard on re-lock)
+            BiometricAuthPopup(
+                visible = !isAuthenticated && showPopup,
+                onUnlockClick = ::authenticate,
+                errorMessage = authError
+            )
+        }
     }
 }
 

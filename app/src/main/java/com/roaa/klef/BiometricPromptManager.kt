@@ -46,12 +46,16 @@ class BiometricPromptManager(private val activity: FragmentActivity) {
             override fun onAuthenticationFailed() = Unit
         }
 
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Unlock Klef")
-            .setSubtitle("Use biometrics or your device PIN / password")
-            .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
-            .build()
+        try {
+            val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Unlock Klef")
+                .setSubtitle("Use biometrics or your device PIN / password")
+                .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+                .build()
 
-        BiometricPrompt(activity, executor, callback).authenticate(promptInfo)
+            BiometricPrompt(activity, executor, callback).authenticate(promptInfo)
+        } catch (e: Exception) {
+            onResult(BiometricResult.NotAvailable)
+        }
     }
 }
