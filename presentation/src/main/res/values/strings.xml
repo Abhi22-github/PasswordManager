@@ -43,14 +43,14 @@
     <string name="bookmark_copy_password">Copy password</string>
     <string name="bookmark_copied">Password copied</string>
 
-    <string name="generator_title">Generate Password</string>
+    <string name="generator_title">Generate password</string>
     <string name="generator_subtitle">Create a strong unique password tailored to your needs</string>
-    <string name="generator_length">Length of Password</string>
+    <string name="generator_length">Length of password</string>
     <string name="generator_include">Include</string>
     <string name= "generator_character">Character</string>
     <string name="generator_uppercase">Uppercase</string>
     <string name="generator_digits">Digits</string>
-    <string name="generator_special_chars">Special Character</string>
+    <string name="generator_special_chars">Special character</string>
     <string name="generator_error">Something went wrong!</string>
 
 

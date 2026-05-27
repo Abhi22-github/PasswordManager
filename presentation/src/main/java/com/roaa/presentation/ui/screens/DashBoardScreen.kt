@@ -15,18 +15,27 @@ import androidx.compose.ui.geometry.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import androidx.compose.ui.platform.LocalContext
+import coil3.request.crossfade
 import com.airbnb.lottie.compose.*
 import com.roaa.domain.model.Credentials
+import com.roaa.domain.model.ServiceType
 import com.roaa.presentation.R
 import com.roaa.presentation.ui.actions.*
 import com.roaa.presentation.ui.components.appBar.DashBoardTopAppBar
 import com.roaa.presentation.ui.components.cards.DashBoardItemCard
+import com.roaa.presentation.ui.components.cards.WavyCircleBackground
 import com.roaa.presentation.ui.theme.*
 import com.roaa.presentation.utils.models.PasswordStats
 import com.roaa.presentation.viewModels.*
@@ -42,15 +51,17 @@ fun DashBoardScreen(
     modifier: Modifier = Modifier,
     passwordViewModel: PasswordViewModel = hiltViewModel(),
     dashboardViewModel: PasswordStatViewModel = hiltViewModel()
-
 ) {
     val passwords: List<Credentials>? by passwordViewModel.allPasswords.collectAsStateWithLifecycle()
     val passwordStats by dashboardViewModel.passwordStat.collectAsStateWithLifecycle()
+    val recentlyCopied by passwordViewModel.recentlyCopied.collectAsStateWithLifecycle()
 
     DashBoardScreenContent(
         credentials = passwords,
         stats = passwordStats,
+        recentlyCopied = recentlyCopied,
         onAction = onAction,
+        onPasswordCopied = passwordViewModel::onPasswordCopied,
         modifier = modifier
     )
 }
@@ -59,16 +70,23 @@ fun DashBoardScreen(
 private fun DashBoardScreenContent(
     credentials: List<Credentials>?,
     stats: PasswordStats,
+    recentlyCopied: List<Credentials>,
     onAction: (DashboardActions) -> Unit,
+    onPasswordCopied: (Credentials) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
+    var selectedFilter by remember { mutableStateOf<ServiceType?>(null) }
+
+    val filteredCredentials = remember(credentials, selectedFilter) {
+        credentials?.filter { selectedFilter == null || it.serviceType == selectedFilter }
+    }
 
     Column(modifier = modifier.fillMaxSize()) {
         DashBoardTopAppBar()
         Spacer(modifier = Modifier.height(EightDp))
 
-        // null = loading (show nothing), true = empty, false = has items
+        // null = loading, true = empty, false = has items
         AnimatedContent(
             targetState = credentials?.isEmpty(),
             transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(200)) },
@@ -102,36 +120,90 @@ private fun DashBoardScreenContent(
                     }
                 }
             } else if (isEmpty == false) {
+                val items = filteredCredentials.orEmpty()
                 LazyColumn(
                     state = listState,
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(VerticalSpacingInConnectedCards),
                     contentPadding = PaddingValues(bottom = ToolbarBottomGap)
                 ) {
-                    itemsIndexed(
-                        items = credentials.orEmpty(),
-                        key = { _, item -> item.id }
-                    ) { index, item ->
-                        credentials?.let {
+                    if (recentlyCopied.isNotEmpty()) {
+                        item(key = "recently_copied") {
+                            RecentlyCopiedSection(
+                                items = recentlyCopied,
+                                onItemClick = { id -> onAction(DashboardActions.OnCardClicked(id)) }
+                            )
+                        }
+                    }
+
+                    item(key = "filter_chips") {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = EightDp),
+                            horizontalArrangement = Arrangement.spacedBy(EightDp)
+                        ) {
+                            FilterChip(
+                                selected = selectedFilter == null,
+                                onClick = { selectedFilter = null },
+                                label = { Text("All") }
+                            )
+                            FilterChip(
+                                selected = selectedFilter == ServiceType.APP,
+                                onClick = { selectedFilter = ServiceType.APP },
+                                label = { Text("Apps") }
+                            )
+                            FilterChip(
+                                selected = selectedFilter == ServiceType.WEBSITE,
+                                onClick = { selectedFilter = ServiceType.WEBSITE },
+                                label = { Text("Websites") }
+                            )
+                        }
+                    }
+
+                    if (items.isEmpty()) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 48.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "No ${if (selectedFilter == ServiceType.APP) "apps" else "websites"} added yet",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                        }
+                    } else {
+                        itemsIndexed(
+                            items = items,
+                            key = { _, item -> item.id }
+                        ) { index, item ->
                             val shape = when {
-                                credentials.size == 1 -> RoundedCornerShape(CardCornerRadius)
+                                items.size == 1 -> RoundedCornerShape(CardCornerRadius)
                                 index == 0 -> RoundedCornerShape(
                                     topStart = CardCornerRadius,
                                     topEnd = CardCornerRadius
                                 )
-
-                                index == credentials.lastIndex -> RoundedCornerShape(
+                                index == items.lastIndex -> RoundedCornerShape(
                                     bottomStart = CardCornerRadius,
                                     bottomEnd = CardCornerRadius
                                 )
-
                                 else -> RectangleShape
                             }
                             DashBoardItemCard(
                                 modifier = Modifier.animateItem(),
                                 shape = shape,
                                 credentialsItem = item,
-                                onAction = { action -> handleItemCardAction(action, onAction) }
+                                onAction = { action ->
+                                    if (action is DashBoardItemCardActions.OnCopyClicked) {
+                                        onPasswordCopied(item)
+                                    }
+                                    handleItemCardAction(action, onAction)
+                                }
                             )
                         }
                     }
@@ -599,6 +671,95 @@ private fun SectionHeader(
     )
 }
 
+private val RecentItemSize = 68.dp
+private val RecentItemRadius = 16.dp
+
+@Composable
+private fun RecentlyCopiedSection(
+    items: List<Credentials>,
+    onItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier.padding(bottom = SectionSpacing)) {
+        Text(
+            text = "Recently Copied",
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(bottom = EightDp)
+        )
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(EightDp)) {
+            items(items = items, key = { it.id }) { credentials ->
+                RecentlyCopiedItem(
+                    credentials = credentials,
+                    onClick = { onItemClick(credentials.id) }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RecentlyCopiedItem(
+    credentials: Credentials,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Card(
+            onClick = onClick,
+            modifier = Modifier.size(RecentItemSize),
+            shape = RoundedCornerShape(RecentItemRadius),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
+            )
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                when (credentials.serviceType) {
+                    ServiceType.APP -> WavyCircleBackground(size = 40.dp) {
+                        AsyncImage(
+                            model = R.drawable.android_icon,
+                            contentDescription = null,
+                            modifier = Modifier.padding(6.dp),
+                            contentScale = ContentScale.Fit,
+                            colorFilter = ColorFilter.tint(Color.White)
+                        )
+                    }
+                    ServiceType.WEBSITE -> AsyncImage(
+                        model = if (credentials.logoUrl.isNullOrEmpty()) {
+                            R.drawable.website_icon
+                        } else {
+                            ImageRequest.Builder(context)
+                                .data(credentials.logoUrl)
+                                .crossfade(true)
+                                .build()
+                        },
+                        contentDescription = null,
+                        modifier = Modifier.size(40.dp).clip(CircleShape),
+                        contentScale = ContentScale.Fit
+                    )
+                }
+            }
+        }
+        Spacer(Modifier.height(4.dp))
+        Text(
+            text = credentials.serviceName,
+            style = MaterialTheme.typography.labelSmall,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.width(RecentItemSize)
+        )
+    }
+}
+
 private fun handleItemCardAction(
     action: DashBoardItemCardActions,
     onScreenAction: (DashboardActions) -> Unit
@@ -630,8 +791,10 @@ private val PLACEHOLDER_STATS = PasswordStats(
 @Composable
 private fun DashBoardScreenContentPreview() {
     DashBoardScreenContent(
-        credentials = emptyList<Credentials>(),
+        credentials = emptyList(),
         stats = PLACEHOLDER_STATS,
-        onAction = {}
+        recentlyCopied = emptyList(),
+        onAction = {},
+        onPasswordCopied = {}
     )
 }

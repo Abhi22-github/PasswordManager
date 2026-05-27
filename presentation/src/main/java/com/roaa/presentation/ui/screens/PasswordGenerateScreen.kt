@@ -130,7 +130,7 @@ private fun PasswordGenerateScreenContent(
             )
         }
 
-        Spacer(Modifier.height(SectionTopSpacing))
+        Spacer(Modifier.height(12.dp))
 
         CardBackgroundStandard() {
             CardHeading(cardTitle = stringResource(R.string.generator_length))
@@ -142,7 +142,7 @@ private fun PasswordGenerateScreenContent(
                 modifier = Modifier.padding(horizontal = SliderHorizontalPadding)
             )
         }
-        Spacer(Modifier.height(SectionTopSpacing))
+        Spacer(Modifier.height(12.dp))
 
         CardBackgroundStandard() {
             CardHeading(cardTitle = stringResource(R.string.generator_include))

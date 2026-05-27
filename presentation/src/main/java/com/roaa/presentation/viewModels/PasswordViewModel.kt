@@ -25,6 +25,15 @@ class PasswordViewModel @Inject constructor(
 ) : ViewModel() {
 
 
+    private val _recentlyCopied = MutableStateFlow<List<Credentials>>(emptyList())
+    val recentlyCopied: StateFlow<List<Credentials>> = _recentlyCopied.asStateFlow()
+
+    fun onPasswordCopied(credentials: Credentials) {
+        _recentlyCopied.update { current ->
+            (listOf(credentials) + current.filter { it.id != credentials.id }).take(10)
+        }
+    }
+
     private val _passwordInfoUiState = MutableStateFlow(PasswordInfoUiState())
     val passwordInfoUiState: StateFlow<PasswordInfoUiState> = _passwordInfoUiState.asStateFlow()
 
