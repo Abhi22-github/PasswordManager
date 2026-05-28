@@ -3,13 +3,12 @@ package com.roaa.presentation.ui.components.cards
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.ContentScale
@@ -24,8 +23,7 @@ import coil3.request.*
 import com.roaa.domain.model.*
 import com.roaa.presentation.R
 import com.roaa.presentation.ui.actions.DashBoardItemCardActions
-import com.roaa.presentation.ui.theme.AndroidGreen
-import com.roaa.presentation.ui.theme.CardInnerPadding
+import com.roaa.presentation.ui.theme.*
 import kotlinx.coroutines.delay
 import kotlin.math.*
 
@@ -47,6 +45,7 @@ fun DashBoardItemCard(
         onClick = { onAction(DashBoardItemCardActions.OnCardClicked(credentialsItem.id)) },
         modifier = modifier,
         shape = shape,
+        elevation = CardDefaults.outlinedCardElevation(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
         )
@@ -95,9 +94,14 @@ private fun ServiceAvatar(
 
     when (serviceType) {
         ServiceType.APP -> {
-            WavyCircleBackground(
-                modifier = modifier,
-                size = AvatarSize
+            Box(
+                modifier = modifier
+                    .size(AvatarSize)
+                    .clip(MaterialShapes.Cookie7Sided.toShape())
+                    .background(
+                        AndroidGreen,
+                        MaterialShapes.Cookie7Sided.toShape()
+                    )
             ) {
                 AsyncImage(
                     modifier = Modifier.padding(4.dp),
@@ -115,7 +119,7 @@ private fun ServiceAvatar(
                 modifier = modifier
                     .size(AvatarSize)
                     .clip(CircleShape),
-                model = if(image.isNullOrEmpty()) R.drawable.website_icon else request,
+                model = if (image.isNullOrEmpty()) R.drawable.website_icon else request,
                 contentDescription = contentDescription,
                 contentScale = ContentScale.Fit,
                 colorFilter = null
@@ -126,44 +130,6 @@ private fun ServiceAvatar(
 
 
 @Composable
-fun WavyCircleBackground(
-    modifier: Modifier = Modifier,
-    color: Color = AndroidGreen,
-    waves: Int = 8,
-    amplitude: Float = 0.08f, // 0.0 = perfect circle, 0.2 = very wavy
-    size: Dp = 120.dp,
-    content: @Composable () -> Unit = {}
-) {
-    Box(
-        modifier = modifier
-            .size(size)
-            .drawBehind {
-                val centerX = this.size.width / 2f
-                val centerY = this.size.height / 2f
-                val radius = minOf(centerX, centerY)
-                val ampPx = radius * amplitude
-
-                val path = Path()
-                val steps = 360
-                for (i in 0..steps) {
-                    val angle = (i * Math.PI * 2 / steps).toFloat()
-                    // Sinusoidal wave around the circle
-                    val wave = sin(angle * waves) * ampPx
-                    val r = radius - ampPx + wave + ampPx
-                    val x = centerX + cos(angle) * r
-                    val y = centerY + sin(angle) * r
-
-                    if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
-                }
-                path.close()
-
-                drawPath(path = path, color = color)
-            },
-        content = { content() }
-    )
-}
-
-@Composable
 private fun ServiceLabel(
     serviceName: String,
     username: String,
@@ -172,19 +138,19 @@ private fun ServiceLabel(
     Column(modifier = modifier) {
         Text(
             text = serviceName,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleMedium.copy(fontSize = 15.sp),
             color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        if(false)
-        Text(
-            text = username,
-            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+        if (false)
+            Text(
+                text = username,
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
     }
 }
 
@@ -223,12 +189,12 @@ private fun CardActions(
                 }
             )
         }
-        if(false)
-        CardActionButton(
-            iconRes = R.drawable.more_vert_icon,
-            contentDescription = stringResource(R.string.dashboard_card_more),
-            onClick = onMoreClick
-        )
+        if (false)
+            CardActionButton(
+                iconRes = R.drawable.more_vert_icon,
+                contentDescription = stringResource(R.string.dashboard_card_more),
+                onClick = onMoreClick
+            )
     }
 }
 

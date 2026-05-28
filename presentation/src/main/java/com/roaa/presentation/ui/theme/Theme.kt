@@ -250,6 +250,7 @@ val unspecified_scheme = ColorFamily(
     Unspecified, Unspecified, Unspecified, Unspecified
 )
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun PasswordManagerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -266,10 +267,11 @@ fun PasswordManagerTheme(
 //                ContextCompat.getColor(context, android.R.color.system_accent1_500)
 //            )
             val seedColor = blue
-            dynamicColorScheme(
+            rememberDynamicColorScheme(
                 seedColor = seedColor,
                 isDark = darkTheme,
                 isAmoled = false,
+                style = PaletteStyle.Expressive
             )
         }
 
@@ -284,10 +286,11 @@ fun PasswordManagerTheme(
         }
     }
 
-    MaterialTheme(
+    MaterialExpressiveTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
+        motionScheme = MotionScheme.expressive(),
     )
 }
 

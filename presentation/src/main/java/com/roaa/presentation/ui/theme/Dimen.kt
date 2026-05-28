@@ -10,10 +10,10 @@ val ScreenTopPadding = 12.dp
 val ScreenBottomPadding = 12.dp
 
 // Cards
-val CardInnerPadding = 12.dp
-val VerticalSpacingInConnectedCards = 4.dp
+val CardInnerPadding = 10.dp
+val VerticalSpacingInConnectedCards = 2.dp
 
-val GlobalCardRadius = 20.dp
+val GlobalCardRadius = 25.dp
 
 
 // Dashboard Screen

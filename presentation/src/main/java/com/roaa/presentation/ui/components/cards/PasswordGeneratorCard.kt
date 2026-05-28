@@ -253,11 +253,10 @@ private fun LabeledCircleAction(
     Card(
         modifier = modifier
             .aspectRatio(1f)
-            .clip(RoundedCornerShape(24.dp))
+            .clip(MaterialShapes.Square.toShape())
             .clickable { onClick() },
-
         colors = CardDefaults.cardColors(containerColor = containerColor, contentColor = iconTint),
-        shape = RoundedCornerShape(24.dp)
+        shape = MaterialShapes.Square.toShape()
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

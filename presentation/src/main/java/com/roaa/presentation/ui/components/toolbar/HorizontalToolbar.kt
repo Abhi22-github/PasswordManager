@@ -96,12 +96,12 @@ private fun AddPasswordFab(
     FloatingToolbarDefaults.VibrantFloatingActionButton(
         onClick = onClick,
         modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.primaryContainer
+        containerColor = MaterialTheme.colorScheme.tertiaryContainer
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.add_icon),
             contentDescription = stringResource(R.string.toolbar_add_password),
-            tint = MaterialTheme.colorScheme.onPrimaryContainer
+            tint = MaterialTheme.colorScheme.onTertiaryContainer
         )
     }
 }
@@ -115,7 +115,7 @@ private fun ToolbarButton(
 ) {
     val containerColor by animateColorAsState(
         targetValue = if (isSelected) {
-            MaterialTheme.colorScheme.primaryContainer
+            MaterialTheme.colorScheme.secondaryContainer
         } else {
             MaterialTheme.colorScheme.surfaceContainerLowest
         },
@@ -124,7 +124,7 @@ private fun ToolbarButton(
     )
     val contentColor by animateColorAsState(
         targetValue = if (isSelected) {
-            MaterialTheme.colorScheme.onPrimaryContainer
+            MaterialTheme.colorScheme.onSecondaryContainer
         } else {
             MaterialTheme.colorScheme.onSurface
         },
