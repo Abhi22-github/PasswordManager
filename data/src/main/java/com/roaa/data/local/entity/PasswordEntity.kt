@@ -19,5 +19,6 @@ data class PasswordEntity(
     val serviceType: ServiceType,
     val strength: Float = 0f,
     val createdAt: Long = System.currentTimeMillis(),
-    val updatedAt: Long = System.currentTimeMillis()
+    val updatedAt: Long = System.currentTimeMillis(),
+    val lastCopiedAt: Long? = null
 )

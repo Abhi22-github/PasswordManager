@@ -51,4 +51,11 @@ class PasswordRepositoryImpl @Inject constructor(
     override suspend fun deleteById(id: String) {
         dao.deleteById(id)
     }
+
+    override suspend fun recordPasswordCopied(id: String) {
+        dao.updateLastCopiedAt(id, System.currentTimeMillis())
+    }
+
+    override fun getRecentlyCopied(): Flow<List<Credentials>> =
+        dao.getRecentlyCopied().map { it.toDomainList(encryptor) }
 }

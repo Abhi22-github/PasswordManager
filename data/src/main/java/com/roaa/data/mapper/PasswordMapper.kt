@@ -16,7 +16,8 @@ fun PasswordEntity.toDomain(encryptor: PasswordEncryptor): Credentials = Credent
     strength = strength,
     createdAt = createdAt,
     updatedAt = updatedAt,
-    serviceType = serviceType
+    serviceType = serviceType,
+    lastCopiedAt = lastCopiedAt
 )
 
 fun Credentials.toEntity(encryptor: PasswordEncryptor): PasswordEntity = PasswordEntity(
@@ -31,7 +32,8 @@ fun Credentials.toEntity(encryptor: PasswordEncryptor): PasswordEntity = Passwor
     strength = strength,
     createdAt = createdAt,
     updatedAt = updatedAt,
-    serviceType = serviceType
+    serviceType = serviceType,
+    lastCopiedAt = lastCopiedAt
 )
 
 fun List<PasswordEntity>.toDomainList(encryptor: PasswordEncryptor): List<Credentials> =

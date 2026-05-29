@@ -16,26 +16,22 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import androidx.compose.ui.platform.LocalContext
-import coil3.request.crossfade
+import coil3.request.*
 import com.airbnb.lottie.compose.*
-import com.roaa.domain.model.Credentials
-import com.roaa.domain.model.ServiceType
+import com.roaa.domain.model.*
 import com.roaa.presentation.R
 import com.roaa.presentation.ui.actions.*
 import com.roaa.presentation.ui.components.appBar.DashBoardTopAppBar
 import com.roaa.presentation.ui.components.cards.DashBoardItemCard
-import com.roaa.presentation.ui.components.cards.WavyCircleBackground
 import com.roaa.presentation.ui.theme.*
 import com.roaa.presentation.utils.models.PasswordStats
 import com.roaa.presentation.viewModels.*
@@ -72,7 +68,7 @@ private fun DashBoardScreenContent(
     stats: PasswordStats,
     recentlyCopied: List<Credentials>,
     onAction: (DashboardActions) -> Unit,
-    onPasswordCopied: (Credentials) -> Unit,
+    onPasswordCopied: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
@@ -188,10 +184,12 @@ private fun DashBoardScreenContent(
                                     topStart = CardCornerRadius,
                                     topEnd = CardCornerRadius
                                 )
+
                                 index == items.lastIndex -> RoundedCornerShape(
                                     bottomStart = CardCornerRadius,
                                     bottomEnd = CardCornerRadius
                                 )
+
                                 else -> RectangleShape
                             }
                             DashBoardItemCard(
@@ -200,7 +198,7 @@ private fun DashBoardScreenContent(
                                 credentialsItem = item,
                                 onAction = { action ->
                                     if (action is DashBoardItemCardActions.OnCopyClicked) {
-                                        onPasswordCopied(item)
+                                        onPasswordCopied(item.id)
                                     }
                                     handleItemCardAction(action, onAction)
                                 }
@@ -713,9 +711,9 @@ private fun RecentlyCopiedItem(
         Card(
             onClick = onClick,
             modifier = Modifier.size(RecentItemSize),
-            shape = RoundedCornerShape(RecentItemRadius),
+            shape = MaterialShapes.Pill.toShape(),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
             )
         ) {
             Box(
@@ -723,7 +721,15 @@ private fun RecentlyCopiedItem(
                 contentAlignment = Alignment.Center
             ) {
                 when (credentials.serviceType) {
-                    ServiceType.APP -> WavyCircleBackground(size = 40.dp) {
+                    ServiceType.APP -> Box(
+                        modifier = modifier
+                            .size(40.dp)
+                            .clip(MaterialShapes.Cookie7Sided.toShape())
+                            .background(
+                                AndroidGreen,
+                                MaterialShapes.Cookie7Sided.toShape()
+                            )
+                    ) {
                         AsyncImage(
                             model = R.drawable.android_icon,
                             contentDescription = null,
@@ -732,6 +738,7 @@ private fun RecentlyCopiedItem(
                             colorFilter = ColorFilter.tint(Color.White)
                         )
                     }
+
                     ServiceType.WEBSITE -> AsyncImage(
                         model = if (credentials.logoUrl.isNullOrEmpty()) {
                             R.drawable.website_icon
@@ -742,7 +749,9 @@ private fun RecentlyCopiedItem(
                                 .build()
                         },
                         contentDescription = null,
-                        modifier = Modifier.size(40.dp).clip(CircleShape),
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape),
                         contentScale = ContentScale.Fit
                     )
                 }
@@ -751,7 +760,7 @@ private fun RecentlyCopiedItem(
         Spacer(Modifier.height(4.dp))
         Text(
             text = credentials.serviceName,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,

@@ -26,4 +26,8 @@ interface PasswordRepository {
     suspend fun deletePassword(credentials: Credentials)
 
     suspend fun deleteById(id: String)
+
+    suspend fun recordPasswordCopied(id: String)
+
+    fun getRecentlyCopied(): Flow<List<Credentials>>
 }

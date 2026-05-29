@@ -4,6 +4,8 @@ import androidx.lifecycle.*
 import com.roaa.domain.model.*
 import com.roaa.domain.repositoryInterfaces.BrandLogoUrlBuilder
 import com.roaa.domain.usecase.*
+import com.roaa.domain.usecase.GetRecentlyCopiedUseCase
+import com.roaa.domain.usecase.RecordPasswordCopiedUseCase
 import com.roaa.presentation.utils.PasswordInfoUiState
 import com.roaa.presentation.utils.formEditor.EditorMode
 import com.roaa.presentation.utils.models.*
@@ -21,17 +23,20 @@ class PasswordViewModel @Inject constructor(
     private val getAllPasswords: GetAllPasswordsUseCase,
     private val deletePasswordById: DeletePasswordByIdUseCase,
     private val observePasswordById: ObservePasswordByIdUseCase,
-    private val logoUrlBuilder: BrandLogoUrlBuilder
+    private val logoUrlBuilder: BrandLogoUrlBuilder,
+    private val recordPasswordCopied: RecordPasswordCopiedUseCase,
+    private val getRecentlyCopied: GetRecentlyCopiedUseCase
 ) : ViewModel() {
 
+    val recentlyCopied: StateFlow<List<Credentials>> = getRecentlyCopied()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
-    private val _recentlyCopied = MutableStateFlow<List<Credentials>>(emptyList())
-    val recentlyCopied: StateFlow<List<Credentials>> = _recentlyCopied.asStateFlow()
-
-    fun onPasswordCopied(credentials: Credentials) {
-        _recentlyCopied.update { current ->
-            (listOf(credentials) + current.filter { it.id != credentials.id }).take(10)
-        }
+    fun onPasswordCopied(id: String) {
+        viewModelScope.launch { recordPasswordCopied(id) }
     }
 
     private val _passwordInfoUiState = MutableStateFlow(PasswordInfoUiState())

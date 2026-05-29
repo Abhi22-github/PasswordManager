@@ -53,4 +53,10 @@ interface PasswordDao {
 
     @Query("DELETE FROM passwords")
     suspend fun deleteAll()
+
+    @Query("UPDATE passwords SET lastCopiedAt = :timestamp WHERE id = :id")
+    suspend fun updateLastCopiedAt(id: String, timestamp: Long)
+
+    @Query("SELECT * FROM passwords WHERE lastCopiedAt IS NOT NULL ORDER BY lastCopiedAt DESC LIMIT 10")
+    fun getRecentlyCopied(): Flow<List<PasswordEntity>>
 }
