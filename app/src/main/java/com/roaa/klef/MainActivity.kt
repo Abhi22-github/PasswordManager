@@ -270,6 +270,9 @@ fun AppNavDisplay(
             entry<Destinations.PasswordHealthScreen> { destination ->
                 PasswordHealthScreen(
                     onBackClick = onBack,
+                    onEditPassword = { passwordId ->
+                        backStack.add(Destinations.PasswordEditorScreen(editingId = passwordId))
+                    },
                     modifier = globalModifier
                 )
             }

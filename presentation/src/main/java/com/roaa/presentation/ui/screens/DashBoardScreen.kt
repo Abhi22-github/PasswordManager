@@ -752,7 +752,12 @@ private fun RecentlyCopiedItem(
                         modifier = Modifier
                             .size(40.dp)
                             .clip(CircleShape),
-                        contentScale = ContentScale.Fit
+                        contentScale = ContentScale.Fit,
+                        colorFilter = if (credentials.logoUrl.isNullOrEmpty()) {
+                            ColorFilter.tint(MaterialTheme.colorScheme.onSurface.copy(0.2f))
+                        } else {
+                            null
+                        },
                     )
                 }
             }
