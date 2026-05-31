@@ -22,6 +22,8 @@ val GlobalCardRadius = 25.dp
 
 // General Dimensions
 val SixteenDp = 16.dp
+val TwentyFour = 24.dp
+val ThirtyTwo = 32.dp
 val EightDp = 8.dp
 val StandardCircle = 48.dp
 val ZeroDp = 0.dp

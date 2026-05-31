@@ -6,13 +6,12 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.*
@@ -24,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import coil3.request.*
+import com.airbnb.lottie.compose.*
 import com.roaa.domain.model.*
 import com.roaa.presentation.R
 import com.roaa.presentation.ui.components.appBar.DashBoardTopAppBar
@@ -73,12 +73,22 @@ fun PasswordHealthScreenContent(
     ) {
         DashBoardTopAppBar()
         Spacer(modifier = Modifier.height(EightDp))
-        Image(
-            painter = painterResource(R.drawable.illustration_password_health),
-            contentDescription = "",
-            modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp)
-        )
+//        Image(
+//            painter = painterResource(R.drawable.illustration_password_health),
+//            contentDescription = "",
+//            modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp)
+//        )
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            PasswordStatsAnimation()
+        }
         Spacer(modifier = Modifier.height(SixteenDp))
+        Text(
+            text = "Password checked for ${passwordStats.total} sites and apps",
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = modifier.align(Alignment.CenterHorizontally)
+        )
 
         // Compromised — list-based check since SQL groups encrypted bytes
         val isCompromisedSafe = compromisedPasswords.isEmpty()
@@ -133,11 +143,28 @@ fun PasswordHealthScreenContent(
 }
 
 @Composable
+fun PasswordStatsAnimation(modifier: Modifier = Modifier) {
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.password_stat_animation)
+    )
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever // or a fixed count
+    )
+
+    LottieAnimation(
+        composition = composition,
+        progress = { progress },
+        modifier = Modifier.size(200.dp)
+    )
+}
+
+@Composable
 fun PasswordHealthItemCard(
     cardShape: Shape,
     iconBackgroundColor: Color,
     iconColor: Color,
-    icon: Int= R.drawable.info_circle_icon,
+    icon: Int = R.drawable.info_circle_icon,
     cardTitle: String = "",
     cardSubTitle: String = "",
     passwords: List<Credentials> = emptyList(),
@@ -172,7 +199,11 @@ fun PasswordHealthItemCard(
                             .background(iconBackgroundColor),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(painter = painterResource(icon), contentDescription = "", tint = iconColor)
+                        Icon(
+                            painter = painterResource(icon),
+                            contentDescription = "",
+                            tint = iconColor
+                        )
                     }
                     Spacer(modifier = Modifier.width(SixteenDp))
                     Column {
