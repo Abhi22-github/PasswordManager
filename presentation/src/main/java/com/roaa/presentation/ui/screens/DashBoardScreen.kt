@@ -35,6 +35,7 @@ import com.roaa.presentation.ui.components.cards.DashBoardItemCard
 import com.roaa.presentation.ui.theme.*
 import com.roaa.presentation.utils.models.PasswordStats
 import com.roaa.presentation.viewModels.*
+import androidx.compose.ui.Modifier
 
 private val SectionSpacing = 12.dp
 
@@ -80,7 +81,7 @@ private fun DashBoardScreenContent(
 
     Column(modifier = modifier.fillMaxSize()) {
         DashBoardTopAppBar()
-        Spacer(modifier = Modifier.height(EightDp))
+//        Spacer(modifier = Modifier.height(EightDp))
 
         // null = loading, true = empty, false = has items
         AnimatedContent(
@@ -212,7 +213,7 @@ private fun DashBoardScreenContent(
 }
 
 @Composable
-fun EmptyScreenAnimation() {
+fun EmptyScreenAnimation(modifier: Modifier = Modifier) {
     val composition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(R.raw.empty_status)
     )

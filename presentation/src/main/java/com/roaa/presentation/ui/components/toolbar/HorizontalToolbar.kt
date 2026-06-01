@@ -18,7 +18,7 @@ import com.roaa.presentation.R
 import com.roaa.presentation.ui.theme.ManropeFont
 import com.roaa.presentation.utils.BottomAppBarState
 
-private val ToolbarContentPadding = 4.dp
+private val ToolbarContentPadding = 1.dp
 private const val COLOR_ANIM_DURATION_MS = 500
 private const val ICON_FADE_DURATION_MS = 300
 private const val UNSELECTED_ICON_SCALE = 0.8f
@@ -167,9 +167,8 @@ private fun ToolbarButton(
             }
             Text(
                 text = label,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.SemiBold,
-                fontFamily = ManropeFont,
                 color = contentColor
             )
         }

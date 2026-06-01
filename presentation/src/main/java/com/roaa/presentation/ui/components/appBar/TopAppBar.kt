@@ -1,10 +1,13 @@
 package com.roaa.presentation.ui.components.appBar
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -13,7 +16,7 @@ import com.roaa.presentation.R
 import com.roaa.presentation.ui.components.buttons.CircleWhiteButton
 
 private val TopAppBarHeight: Dp = 64.dp
-private val FilledButtonSize = 48.dp
+private val FilledButtonSize = 36.dp
 private val margin_twelve = 12.dp
 
 @Composable

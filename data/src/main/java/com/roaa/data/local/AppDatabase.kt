@@ -8,7 +8,7 @@ import com.roaa.data.local.entity.PasswordEntity
 
 @Database(
     entities = [PasswordEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 
