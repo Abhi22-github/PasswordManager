@@ -17,6 +17,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation3.runtime.*
 import androidx.navigation3.ui.NavDisplay
+import com.google.android.gms.common.util.CrashUtils
 import com.roaa.klef.navigation.Destinations
 import com.roaa.presentation.ui.actions.DashboardActions
 import com.roaa.presentation.ui.components.toolbar.HorizontalToolbar

@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.roaa.klef" />
+                  <option name="mobileSdkAppId" value="1:801750327182:android:1edb3dde005fe82b6d4edf" />
+                  <option name="projectId" value="klef-1d1cc" />
+                  <option name="projectNumber" value="801750327182" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

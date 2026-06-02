@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "801750327182",
+    "project_id": "klef-1d1cc",
+    "storage_bucket": "klef-1d1cc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:801750327182:android:1edb3dde005fe82b6d4edf",
+        "android_client_info": {
+          "package_name": "com.roaa.klef"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzn2dhMabhHBIRpfTl2z5yPe2SrTMYMU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
