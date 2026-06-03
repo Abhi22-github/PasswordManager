@@ -56,6 +56,7 @@ espressoCore = "3.5.1"
 
 # Lottie
 lottie-compose = "6.4.0"
+materialVersion = "1.14.0"
 
 
 [libraries]
@@ -124,6 +125,7 @@ material-kolor = { module = "com.materialkolor:material-kolor", version.ref = "m
 
 #Lottie
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie-compose" }
+google-material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
 
 
 [bundles]

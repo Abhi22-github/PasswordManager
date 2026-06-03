@@ -3,18 +3,15 @@ package com.roaa.presentation.ui.components.cards
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.res.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -115,7 +112,7 @@ fun CardHeading(
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = CARD_HEADING_ALPHA)
             )
         }
-            Spacer(Modifier.height(CardTitleBottomSpacing))
+        Spacer(Modifier.height(CardTitleBottomSpacing))
 
     }
 }
@@ -168,7 +165,7 @@ private fun GeneratorActionsRow(
 
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         LabeledCircleAction(
             icon = R.drawable.refresh_icon,
@@ -177,7 +174,8 @@ private fun GeneratorActionsRow(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
             iconTint = MaterialTheme.colorScheme.onSurface,
             onClick = onNewClick,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)
         )
         LabeledCircleAction(
             icon = R.drawable.bookmark_add_icon,
@@ -186,7 +184,8 @@ private fun GeneratorActionsRow(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             iconTint = MaterialTheme.colorScheme.onSecondaryContainer,
             onClick = onSaveClick,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            shape = RoundedCornerShape(0.dp)
         )
 
         AnimatedContent(
@@ -210,7 +209,8 @@ private fun GeneratorActionsRow(
                 onClick = {
                     onCopyClick()
                     isCopied = true
-                }
+                },
+                shape = RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp)
             )
         }
     }
@@ -231,7 +231,7 @@ fun CardBackgroundStandard(
         elevation = CardDefaults.outlinedCardElevation()
     ) {
         Column(
-            modifier = Modifier.padding(CardPadding),
+            modifier = Modifier.padding(horizontal = CardPadding, vertical = 15.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             content()
@@ -248,15 +248,16 @@ private fun LabeledCircleAction(
     containerColor: Color,
     iconTint: Color,
     onClick: () -> Unit,
+    shape: Shape,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .aspectRatio(1f)
-            .clip(MaterialShapes.Square.toShape())
+            .clip(shape)
             .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = containerColor, contentColor = iconTint),
-        shape = MaterialShapes.Square.toShape()
+        shape = shape
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

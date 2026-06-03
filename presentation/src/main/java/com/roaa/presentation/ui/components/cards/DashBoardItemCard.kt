@@ -138,7 +138,7 @@ private fun ServiceLabel(
     Column(modifier = modifier) {
         Text(
             text = serviceName,
-            style = MaterialTheme.typography.titleMedium.copy(fontSize = 15.sp),
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis

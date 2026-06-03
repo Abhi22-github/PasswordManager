@@ -9,15 +9,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.roaa.presentation.R
 import com.roaa.presentation.ui.components.cards.*
 import com.roaa.presentation.ui.components.slider.GenericSlider
 import com.roaa.presentation.ui.components.toggles.ToggleButton
-import com.roaa.presentation.ui.theme.ToolbarBottomGap
+import com.roaa.presentation.ui.theme.*
 import com.roaa.presentation.utils.*
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
@@ -108,6 +110,9 @@ private fun PasswordGenerateScreenContent(
     onCopy: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val uppercaseColor = color1.toCustomRoles()
+    val digitsColor = color2.toCustomRoles()
+    val symbolColor = color5.toCustomRoles()
 
     Column(
         modifier = modifier
@@ -130,42 +135,54 @@ private fun PasswordGenerateScreenContent(
             )
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(8.dp))
 
         CardBackgroundStandard() {
-            CardHeading(cardTitle = stringResource(R.string.generator_length))
+            //  CardHeading(cardTitle = stringResource(R.string.generator_length))
             IntSlider(
-                label = stringResource(R.string.generator_character),
+                label = stringResource(R.string.generator_length),
+                message = stringResource(R.string.generator_length_message),
                 value = options.length,
                 valueRange = MIN_PASSWORD_LENGTH..MAX_PASSWORD_LENGTH,
                 onValueChange = { onOptionsChange(options.copy(length = it)) },
                 modifier = Modifier.padding(horizontal = SliderHorizontalPadding)
             )
         }
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(8.dp))
 
         CardBackgroundStandard() {
-            CardHeading(cardTitle = stringResource(R.string.generator_include))
+            //  CardHeading(cardTitle = stringResource(R.string.generator_include))
             IncludeContentRow(
                 rowTitle = stringResource(R.string.generator_uppercase),
+                rowDescription = stringResource(R.string.generator_uppercase_description),
                 toggleButtonValue = options.includeCapitalChars,
                 toggleButtonValueChanged = {
                     onOptionsChange(options.copy(includeCapitalChars = it))
-                }
+                },
+                containerColor = uppercaseColor.solidColorContainer,
+                contentColor = uppercaseColor.onSolidColorContainer
             )
+            Spacer(modifier = Modifier.height(12.dp))
             IncludeContentRow(
                 rowTitle = stringResource(R.string.generator_digits),
+                rowDescription = stringResource(R.string.generator_digits_description),
                 toggleButtonValue = options.includeDigits,
                 toggleButtonValueChanged = {
                     onOptionsChange(options.copy(includeDigits = it))
-                }
+                },
+                containerColor = digitsColor.solidColorContainer,
+                contentColor = digitsColor.onSolidColorContainer
             )
+            Spacer(modifier = Modifier.height(12.dp))
             IncludeContentRow(
-                rowTitle = stringResource(R.string.generator_special_chars),
+                rowTitle = stringResource(R.string.generator_symbol),
+                rowDescription = stringResource(R.string.generator_symbol_description),
                 toggleButtonValue = options.includeSpecialChars,
                 toggleButtonValueChanged = {
                     onOptionsChange(options.copy(includeSpecialChars = it))
-                }
+                },
+                containerColor = symbolColor.solidColorContainer,
+                contentColor = symbolColor.onSolidColorContainer
             )
 
         }
@@ -193,6 +210,7 @@ private fun ScreenHeader(modifier: Modifier = Modifier) {
 @Composable
 private fun IntSlider(
     label: String,
+    message: String,
     value: Int,
     valueRange: IntRange,
     onValueChange: (Int) -> Unit,
@@ -204,21 +222,34 @@ private fun IntSlider(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Box(
-                modifier = Modifier.background(
-                    MaterialTheme.colorScheme.primaryContainer,
-                    RoundedCornerShape(textValueBackgroundRadius)
+            Column(modifier = Modifier.weight(0.8f)) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.72f)
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            val color = colorSeed.toCustomRoles()
+            Box(
+                modifier = Modifier
+                    .weight(0.2f)
+                    .aspectRatio(1f)
+                    .background(
+                        color.solidColorContainer,
+                        MaterialShapes.Clover8Leaf.toShape()
+                    ),
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = value.toString(),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = color.onSolidColorContainer,
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)
                 )
             }
@@ -238,7 +269,10 @@ fun IncludeContentRow(
     modifier: Modifier = Modifier,
     toggleButtonValue: Boolean,
     toggleButtonValueChanged: (Boolean) -> Unit,
-    rowTitle: String
+    rowTitle: String,
+    rowDescription: String,
+    contentColor: Color,
+    containerColor: Color,
 ) {
     Row(
         modifier = Modifier
@@ -246,12 +280,54 @@ fun IncludeContentRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = rowTitle,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        ToggleButton(checkValue = toggleButtonValue, checkValueChanged = toggleButtonValueChanged)
+        Box(
+            modifier = Modifier
+                .background(
+                    color = containerColor,
+                    shape = MaterialShapes.Square.toShape()
+                )
+                .size(48.dp)
+                .aspectRatio(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = when (rowTitle) {
+                    stringResource(R.string.generator_uppercase) -> {
+                        "A"
+                    }
+
+                    stringResource(R.string.generator_digits) -> {
+                        "1"
+                    }
+
+                    stringResource(R.string.generator_symbol) -> {
+                        "#"
+                    }
+
+                    else -> {
+                        "~"
+                    }
+                },
+                style = MaterialTheme.typography.titleLarge,
+                color = contentColor
+            )
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = rowTitle,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = rowDescription,
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.72f)
+            )
+        }
+        ToggleButton(checkValue = toggleButtonValue, checkValueChanged = toggleButtonValueChanged,color = contentColor)
     }
 }
 

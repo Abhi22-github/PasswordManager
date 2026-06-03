@@ -78,6 +78,9 @@ dependencies {
     implementation(libs.material.kolor)
 
     implementation(libs.lottie.compose)
+
+    implementation("androidx.graphics:graphics-shapes:1.1.0") // Or latest stable version
+
 }
 
 kapt {
