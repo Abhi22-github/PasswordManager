@@ -2,26 +2,28 @@ package com.roaa.presentation.ui.screens
 
 import android.widget.Toast
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.graphics.shapes.Morph
 import com.roaa.presentation.R
+import com.roaa.presentation.ui.components.appBar.DashBoardTopAppBar
 import com.roaa.presentation.ui.components.cards.*
 import com.roaa.presentation.ui.components.slider.GenericSlider
 import com.roaa.presentation.ui.components.toggles.ToggleButton
 import com.roaa.presentation.ui.theme.*
 import com.roaa.presentation.utils.*
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 private val SliderHorizontalPadding = 6.dp
@@ -45,6 +47,7 @@ private data class GeneratorOptions(
     val includeCapitalChars: Boolean = false
 )
 
+@Suppress("EffectKeys")
 @OptIn(FlowPreview::class)
 @Composable
 fun PasswordGenerateScreen(
@@ -110,18 +113,16 @@ private fun PasswordGenerateScreenContent(
     onCopy: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val uppercaseColor = color1.toCustomRoles()
-    val digitsColor = color2.toCustomRoles()
-    val symbolColor = color5.toCustomRoles()
+    val uppercaseColor = color1.toPalette()
+    val symbolColor = color5.toPalette()
+    val digitsColor = color2.toPalette()
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        ScreenHeader()
-
-        Spacer(Modifier.height(SectionTopSpacing))
+        DashBoardTopAppBar()
 
         AnimatedVisibility(
             visible = passwordText.isNotEmpty(),
@@ -159,10 +160,10 @@ private fun PasswordGenerateScreenContent(
                 toggleButtonValueChanged = {
                     onOptionsChange(options.copy(includeCapitalChars = it))
                 },
-                containerColor = uppercaseColor.solidColorContainer,
-                contentColor = uppercaseColor.onSolidColorContainer
+                containerColor = uppercaseColor.container,
+                contentColor = uppercaseColor.onContainer
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             IncludeContentRow(
                 rowTitle = stringResource(R.string.generator_digits),
                 rowDescription = stringResource(R.string.generator_digits_description),
@@ -170,10 +171,10 @@ private fun PasswordGenerateScreenContent(
                 toggleButtonValueChanged = {
                     onOptionsChange(options.copy(includeDigits = it))
                 },
-                containerColor = digitsColor.solidColorContainer,
-                contentColor = digitsColor.onSolidColorContainer
+                containerColor = digitsColor.container,
+                contentColor = digitsColor.onContainer
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             IncludeContentRow(
                 rowTitle = stringResource(R.string.generator_symbol),
                 rowDescription = stringResource(R.string.generator_symbol_description),
@@ -181,29 +182,13 @@ private fun PasswordGenerateScreenContent(
                 toggleButtonValueChanged = {
                     onOptionsChange(options.copy(includeSpecialChars = it))
                 },
-                containerColor = symbolColor.solidColorContainer,
-                contentColor = symbolColor.onSolidColorContainer
+                containerColor = symbolColor.container,
+                contentColor = symbolColor.onContainer
             )
 
         }
 
         Spacer(Modifier.height(ToolbarBottomGap))
-    }
-}
-
-@Composable
-private fun ScreenHeader(modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
-        Text(
-            text = stringResource(R.string.generator_title),
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Text(
-            text = stringResource(R.string.generator_subtitle),
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
     }
 }
 
@@ -216,6 +201,22 @@ private fun IntSlider(
     onValueChange: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val squareShape = remember { MaterialShapes.Square.normalized() }
+    val cookieShape = remember { MaterialShapes.Cookie9Sided.normalized() }
+    var isClicked by remember { mutableStateOf(false) }
+    val morph = remember { Morph( cookieShape,squareShape) }
+    val animatedProgress = animateFloatAsState(
+        targetValue = if (isClicked) 1f else 0f,
+        label = "progress",
+        animationSpec = spring(dampingRatio = 0.2f, stiffness = Spring.StiffnessMedium)
+    )
+    LaunchedEffect(isClicked) {
+        if (isClicked) {
+            delay(1000)
+            isClicked = false
+        }
+    }
+
     Column(modifier = modifier) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -230,33 +231,36 @@ private fun IntSlider(
                 )
                 Text(
                     text = message,
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.72f)
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurface.copy(0.4f)
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            val color = colorSeed.toCustomRoles()
             Box(
                 modifier = Modifier
                     .weight(0.2f)
                     .aspectRatio(1f)
+                    .clip(MorphPolygonShape(morph, animatedProgress.value))
                     .background(
-                        color.solidColorContainer,
-                        MaterialShapes.Clover8Leaf.toShape()
+                        MaterialTheme.colorScheme.surfaceContainer,
                     ),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = value.toString(),
                     style = MaterialTheme.typography.titleLarge,
-                    color = color.onSolidColorContainer,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)
                 )
             }
         }
+        Spacer(modifier = Modifier.height(8.dp))
         GenericSlider(
             value = value.toFloat(),
-            onValueChange = { onValueChange(it.toInt().coerceIn(valueRange)) },
+            onValueChange = {
+                onValueChange(it.toInt().coerceIn(valueRange))
+                isClicked = true
+            },
             valueRange = valueRange.first.toFloat()..valueRange.last.toFloat(),
             steps = (valueRange.last - valueRange.first - 1).coerceAtLeast(0)
         )
@@ -274,6 +278,15 @@ fun IncludeContentRow(
     contentColor: Color,
     containerColor: Color,
 ) {
+    val squareShape = remember { MaterialShapes.Square.normalized() }
+    val cookieShape = remember { MaterialShapes.Cookie9Sided.normalized() }
+    val morph = remember { Morph(squareShape, cookieShape) }
+    val animatedProgress = animateFloatAsState(
+        targetValue = if (toggleButtonValue) 1f else 0f,
+        label = "progress",
+        animationSpec = spring(dampingRatio = 0.2f, stiffness = Spring.StiffnessMedium)
+    )
+
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -282,9 +295,9 @@ fun IncludeContentRow(
     ) {
         Box(
             modifier = Modifier
+                .clip(MorphPolygonShape(morph, animatedProgress.value))
                 .background(
                     color = containerColor,
-                    shape = MaterialShapes.Square.toShape()
                 )
                 .size(48.dp)
                 .aspectRatio(1f),
@@ -312,7 +325,7 @@ fun IncludeContentRow(
                 color = contentColor
             )
         }
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(12.dp))
         Column(
             modifier = Modifier.weight(1f)
         ) {
@@ -327,7 +340,12 @@ fun IncludeContentRow(
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.72f)
             )
         }
-        ToggleButton(checkValue = toggleButtonValue, checkValueChanged = toggleButtonValueChanged,color = contentColor)
+        Spacer(modifier = Modifier.width(12.dp))
+        ToggleButton(
+            checkValue = toggleButtonValue,
+            checkValueChanged = toggleButtonValueChanged,
+            color = contentColor
+        )
     }
 }
 

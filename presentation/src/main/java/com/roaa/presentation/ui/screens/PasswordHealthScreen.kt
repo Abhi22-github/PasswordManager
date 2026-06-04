@@ -88,19 +88,19 @@ fun PasswordHealthScreenContent(
             modifier = modifier.align(Alignment.CenterHorizontally)
         )
 
-        val compromisedColor = failureColor.toCustomRoles()
-        val reusedColor = orangeColor.toCustomRoles()
-        val weakColor = orangeColor.toCustomRoles()
-        val healthyColor = strongColor.toCustomRoles()
+        val compromisedColor = failureColor.toPalette()
+        val reusedColor = orangeColor.toPalette()
+        val weakColor = orangeColor.toPalette()
+        val healthyColor = strongColor.toPalette()
 
         // Compromised — list-based check since SQL groups encrypted bytes
         val isCompromisedSafe = compromisedPasswords.isEmpty()
         PasswordHealthItemCard(
             cardShape = RoundedCornerShape(topEnd = GlobalCardRadius, topStart = GlobalCardRadius),
             icon = if (isCompromisedSafe) R.drawable.check_circle_icon else R.drawable.info_circle_icon,
-            iconBackgroundColor = if (isCompromisedSafe) healthyColor.solidColorContainer
+            iconBackgroundColor = if (isCompromisedSafe) healthyColor.container
             else MaterialTheme.colorScheme.errorContainer.copy(0.2f),
-            iconColor = if (isCompromisedSafe) healthyColor.solidColor else MaterialTheme.colorScheme.error,
+            iconColor = if (isCompromisedSafe) healthyColor.main else MaterialTheme.colorScheme.error,
             cardTitle = if (isCompromisedSafe) "All passwords are safe"
             else "${compromisedPasswords.size} compromised password",
             cardSubTitle = if (isCompromisedSafe) "No compromised passwords found"
@@ -114,9 +114,9 @@ fun PasswordHealthScreenContent(
         PasswordHealthItemCard(
             cardShape = RoundedCornerShape(ZeroDp),
             icon = if (isReusedSafe) R.drawable.check_circle_icon else R.drawable.info_circle_icon,
-            iconBackgroundColor = if (isReusedSafe) healthyColor.solidColorContainer
+            iconBackgroundColor = if (isReusedSafe) healthyColor.container
             else MaterialTheme.colorScheme.warningContainer.copy(0.2f),
-            iconColor = if (isReusedSafe) healthyColor.solidColor else MaterialTheme.colorScheme.warning,
+            iconColor = if (isReusedSafe) healthyColor.main else MaterialTheme.colorScheme.warning,
             cardTitle = if (isReusedSafe) "All passwords are unique"
             else "${reusedPasswords.size} reused password",
             cardSubTitle = if (isReusedSafe) "No reused passwords found"
@@ -132,9 +132,9 @@ fun PasswordHealthScreenContent(
                 bottomStart = GlobalCardRadius
             ),
             icon = if (isWeakSafe) R.drawable.check_circle_icon else R.drawable.info_circle_icon,
-            iconBackgroundColor = if (isWeakSafe) healthyColor.solidColorContainer
+            iconBackgroundColor = if (isWeakSafe) healthyColor.container
             else MaterialTheme.colorScheme.warningContainer.copy(0.2f),
-            iconColor = if (isWeakSafe) healthyColor.onSolidColorContainer else MaterialTheme.colorScheme.warning,
+            iconColor = if (isWeakSafe) healthyColor.main else MaterialTheme.colorScheme.warning,
             cardTitle = if (isWeakSafe) "All passwords are strong"
             else "${weakPasswords.size} weak password",
             cardSubTitle = if (isWeakSafe) "No weak passwords found"

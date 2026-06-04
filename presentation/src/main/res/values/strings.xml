@@ -43,7 +43,7 @@
     <string name="bookmark_copy_password">Copy password</string>
     <string name="bookmark_copied">Password copied</string>
 
-    <string name="generator_title">Generate password</string>
+    <string name="generator_title">Your generated password</string>
     <string name="generator_subtitle">Create a strong unique password tailored to your needs</string>
     <string name="generator_length">Length</string>
     <string name="generator_length_message">Longer passwords are exponentially stronger</string>

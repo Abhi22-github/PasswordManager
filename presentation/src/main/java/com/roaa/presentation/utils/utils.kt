@@ -2,21 +2,18 @@ package com.roaa.presentation.utils
 
 import android.content.ClipData
 import androidx.compose.material3.ColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ClipEntry
-import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
+import androidx.compose.runtime.*
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.text.*
+import androidx.compose.ui.unit.*
+import androidx.graphics.shapes.Morph
+import androidx.graphics.shapes.toPath
 import com.roaa.domain.model.Credentials
 import com.roaa.presentation.ui.theme.blackColor
+import kotlinx.coroutines.*
 import java.security.SecureRandom
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 fun colorizeText(text: String, colorScheme: ColorScheme): AnnotatedString {
     return buildAnnotatedString {
@@ -127,8 +124,6 @@ private fun String.random(random: SecureRandom): Char =
     this[random.nextInt(this.length)]
 
 
-
-
 enum class BottomAppBarState {
     DashboardScreen,
     HealthScreen,
@@ -163,3 +158,21 @@ data class PasswordInfoUiState(
     val notFound: Boolean = false,
     val logoImageUrl: String? = null,
 )
+
+fun Float.clamp(min: Float, max: Float): Float =
+    (1f - ((this.coerceIn(min, max) - min) / (max - min)))
+
+class MorphPolygonShape(private val morph: Morph, private val percentage: Float) : Shape {
+    private val matrix = Matrix()
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density
+    ): Outline {
+        matrix.scale(size.width, size.width)
+        val path = morph.toPath(progress = percentage).asComposePath()
+        path.transform(matrix)
+        return Outline.Generic(path)
+    }
+
+}

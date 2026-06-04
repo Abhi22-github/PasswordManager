@@ -4,31 +4,20 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.materialkolor.*
 import com.materialkolor.ktx.harmonize
 
-
-@Immutable
-data class CustomColorRoles(
-    val solidColor: Color,
-    val onSolidColor: Color,
-    val solidColorContainer: Color,
-    val onSolidColorContainer: Color
-)
-
-// Extension function to quickly spit out the tokens based on your app state
-@Composable
-fun Color.toCustomRoles(isDark: Boolean = isSystemInDarkTheme()): CustomColorRoles {
-    val harmonized = this.harmonize(MaterialTheme.colorScheme.onSurface)
-    val roles = rememberDynamicColorScheme(this, isDark)
-
-    return CustomColorRoles(
-        solidColor = roles.primary,
-        onSolidColor = roles.onPrimary,
-        solidColorContainer = roles.primaryContainer,
-        onSolidColorContainer = roles.onPrimaryContainer
-    )
-}
+//@Composable
+//fun isNightMode(preferencesViewModel: PreferencesViewModel = hiltViewModel()): Boolean {
+//    val themeMode by preferencesViewModel.getThemeMode.collectAsState(ThemeMode.SYSTEM)
+//    val p = when (themeMode) {
+//        ThemeMode.LIGHT.toString() -> false
+//        ThemeMode.NIGHT.toString() -> true
+//        else -> isSystemInDarkTheme()
+//    }
+//    return p
+//}
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

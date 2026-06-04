@@ -1,7 +1,17 @@
 package com.roaa.presentation.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb  // still used by harmonizeWithColor
+import com.materialkolor.PaletteStyle
+import com.materialkolor.blend.Blend
+import com.materialkolor.dynamicColorScheme
+import kotlin.math.ceil
+import kotlin.math.floor
 
 val AndroidGreen = Color(0xFF3DDC84)
 
@@ -78,3 +88,83 @@ val onboardingColor5 = Color(0xFFEFC8B0)
 val onboardingColor6 = Color(0xFFE0E7F3)
 val onboardingColor7 = Color(0xFFE8DBC9)
 val onboardingColor8 = Color(0xFFC6EFDD)
+
+@Composable
+fun harmonize(designColor: Color, sourceColor: Color = MaterialTheme.colorScheme.primary): Color {
+    return harmonizeWithColor(designColor, sourceColor)
+}
+
+fun harmonizeWithColor(designColor: Color, sourceColor: Color): Color {
+    return Color(Blend.harmonize(designColor.toArgb(), sourceColor.toArgb()))
+}
+
+@Composable
+fun Color.toPalette(darkTheme: Boolean = isSystemInDarkTheme()): HarmonizedColorPalette {
+    return toPaletteWithTheme(this, darkTheme)
+}
+
+fun toPaletteWithTheme(color: Color, darkTheme: Boolean): HarmonizedColorPalette {
+    val scheme = dynamicColorScheme(
+        seedColor = color,
+        isDark = darkTheme,
+        isAmoled = false,
+        style = PaletteStyle.TonalSpot
+    )
+    return HarmonizedColorPalette(
+        main = scheme.primary,
+        onMain = scheme.onPrimary,
+        container = scheme.primaryContainer,
+        onContainer = scheme.onPrimaryContainer,
+        surface = scheme.surface,
+        onSurface = scheme.onSurface,
+        surfaceVariant = scheme.surfaceVariant,
+        onSurfaceVariant = scheme.onSurfaceVariant
+    )
+}
+
+data class HarmonizedColorPalette(
+    val main: Color,
+    val onMain: Color,
+    val container: Color,
+    val onContainer: Color,
+    val surface: Color,
+    val onSurface: Color,
+    val surfaceVariant: Color,
+    val onSurfaceVariant: Color,
+)
+
+fun combineColors(colorA: Color, colorB: Color, angle: Float = 0.5F): Color {
+    val colorAPart = (1F - angle) * 2
+    val colorBPart = angle * 2
+
+    return Color(
+        red = (colorA.red * colorAPart + colorB.red * colorBPart) / 2,
+        green = (colorA.green * colorAPart + colorB.green * colorBPart) / 2,
+        blue = (colorA.blue * colorAPart + colorB.blue * colorBPart) / 2,
+    )
+}
+
+fun combineColors(colors: List<Color>, angle: Float = 0.5F): Color {
+    val approximateIndex = (colors.size - 1) * angle
+    val colorA = colors[floor(approximateIndex).toInt()]
+    val colorB = colors[ceil(approximateIndex).toInt()]
+
+    return combineColors(colorA, colorB, approximateIndex - floor(approximateIndex))
+}
+
+val colorEditor
+    @Composable
+    @ReadOnlyComposable
+    get() = combineColors(
+        MaterialTheme.colorScheme.surface,
+        MaterialTheme.colorScheme.surfaceVariant,
+        0.90F,
+    )
+
+
+fun Color.darken(factor: Float = 0.4f): Color {
+    val red = (red * (1 - factor)).coerceIn(0f, 1f)
+    val green = (green * (1 - factor)).coerceIn(0f, 1f)
+    val blue = (blue * (1 - factor)).coerceIn(0f, 1f)
+    return Color(red, green, blue, alpha)
+}

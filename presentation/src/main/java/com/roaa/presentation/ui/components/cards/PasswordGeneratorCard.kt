@@ -17,7 +17,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.roaa.presentation.R
-import com.roaa.presentation.ui.components.progress.SegmentedStrengthMeter
+import com.roaa.presentation.ui.components.passwordProgress.PasswordStrengthIndicator
+import com.roaa.presentation.ui.theme.HarmonizedColorPalette
 import com.roaa.presentation.utils.*
 import kotlinx.coroutines.delay
 
@@ -30,7 +31,7 @@ private val PasswordToActionsSpacing = 16.dp
 private val StrengthBadgePadding = 6.dp
 private val StrengthBadgeEndPadding = 8.dp
 private val StrengthBadgeCornerRadius = 12.dp
-private val passwordTextCardInnerPadding = 16.dp
+private val passwordTextCardInnerPadding = 32.dp
 private const val CARD_HEADING_ALPHA = 0.7f
 private const val CONTENT_ANIM_DURATION_MS = 200
 private const val COPIED_FEEDBACK_DURATION_MS = 2_000L
@@ -48,21 +49,37 @@ fun PasswordGeneratorCard(
     val passwordStrengthObject = remember(passwordText) { calculatePasswordStrength(passwordText) }
 
     CardBackgroundStandard() {
-        PasswordLabelRow(passwordStrengthObject = passwordStrengthObject)
-        Spacer(Modifier.height(PasswordTopSpacing))
-
+        Column(modifier = Modifier) {
+            Text(
+                text = stringResource(R.string.generator_title),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+               text = stringResource(R.string.generator_subtitle),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurface.copy(0.4f)
+            )
+        }
+        Spacer(Modifier.height(16.dp))
         AnimatedPasswordText(
             modifier = Modifier,
             passwordText = passwordText
         )
-        Spacer(Modifier.height(PasswordBottomSpacing))
-        SegmentedStrengthMeter(
-            passwordStrengthObject = passwordStrengthObject,
-            modifier = Modifier,
-            showLabel = false
-        )
+        Spacer(Modifier.height(8.dp))
+        Row() {
+            PasswordStrengthIndicator(
+                passwordStrengthObject,
+                passwordText,
+            )
+        }
+//        SegmentedStrengthMeter(
+//            passwordStrengthObject = passwordStrengthObject,
+//            modifier = Modifier,
+//            showLabel = false
+//        )
 
-        Spacer(Modifier.height(PasswordToActionsSpacing))
+        Spacer(Modifier.height(24.dp))
 
         GeneratorActionsRow(
             onNewClick = onNewClick,
@@ -88,10 +105,10 @@ fun PasswordLabelRow(
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = CARD_HEADING_ALPHA)
         )
-        StrengthBadge(
-            passwordStrengthObject = passwordStrengthObject,
-            modifier = Modifier
-        )
+//        StrengthBadge(
+//            passwordStrengthObject = passwordStrengthObject,
+//            modifier = Modifier
+//        )
     }
 }
 
@@ -123,7 +140,8 @@ private fun AnimatedPasswordText(
     modifier: Modifier = Modifier
 ) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+        shape = RoundedCornerShape(24.dp)
     ) {
         AnimatedContent(
             targetState = passwordText,
@@ -137,7 +155,7 @@ private fun AnimatedPasswordText(
             Text(
 //                text = generateColorizedText(current),
                 text = current,
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.headlineMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
                 fontFamily = FontFamily.Monospace,
@@ -175,7 +193,7 @@ private fun GeneratorActionsRow(
             iconTint = MaterialTheme.colorScheme.onSurface,
             onClick = onNewClick,
             modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)
+            shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp)
         )
         LabeledCircleAction(
             icon = R.drawable.bookmark_add_icon,
@@ -185,7 +203,7 @@ private fun GeneratorActionsRow(
             iconTint = MaterialTheme.colorScheme.onSecondaryContainer,
             onClick = onSaveClick,
             modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(0.dp)
+            shape = RoundedCornerShape(5.dp)
         )
 
         AnimatedContent(
@@ -210,7 +228,7 @@ private fun GeneratorActionsRow(
                     onCopyClick()
                     isCopied = true
                 },
-                shape = RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp)
+                shape = RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp)
             )
         }
     }
@@ -231,7 +249,7 @@ fun CardBackgroundStandard(
         elevation = CardDefaults.outlinedCardElevation()
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = CardPadding, vertical = 15.dp),
+            modifier = Modifier.padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             content()
@@ -257,7 +275,7 @@ private fun LabeledCircleAction(
             .clip(shape)
             .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = containerColor, contentColor = iconTint),
-        shape = shape
+        shape = CardDefaults.shape
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -284,15 +302,15 @@ private fun LabeledCircleAction(
 }
 
 @Composable
-private fun StrengthBadge(
+fun StrengthBadge(
+    harmonizedColor: HarmonizedColorPalette,
     passwordStrengthObject: PasswordStrengthObject,
     modifier: Modifier = Modifier,
-    strengthColor: Color = MaterialTheme.colorScheme.onSurface
 ) {
     Box(
         modifier = modifier
             .background(
-                color = passwordStrengthObject.passwordColor.copy(alpha = BADGE_BACKGROUND_ALPHA),
+                color = harmonizedColor.surface,
                 shape = RoundedCornerShape(StrengthBadgeCornerRadius)
             ),
         contentAlignment = Alignment.Center
@@ -303,7 +321,7 @@ private fun StrengthBadge(
             modifier = Modifier
                 .padding(StrengthBadgePadding)
                 .padding(horizontal = StrengthBadgeEndPadding),
-            color = passwordStrengthObject.passwordColor
+            color = harmonizedColor.onSurface
         )
     }
 }
