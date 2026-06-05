@@ -129,6 +129,8 @@ private fun calculatePasswordStrengthLabel(passwordStrengthValue: Float): Passwo
  * 0.50–0.75  Good
  * 0.75–1.00  Very Good
  */
+fun calculatePasswordStrengthScore(password: String): Float = calculatePasswordStrengthValue(password)
+
 private fun calculatePasswordStrengthValue(password: String): Float {
     if (password.isEmpty()) return 0f
 

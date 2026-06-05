@@ -57,7 +57,7 @@ fun PasswordGeneratorCard(
             )
             Text(
                text = stringResource(R.string.generator_subtitle),
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Medium),
                 color = MaterialTheme.colorScheme.onSurface.copy(0.4f)
             )
         }
@@ -73,11 +73,6 @@ fun PasswordGeneratorCard(
                 passwordText,
             )
         }
-//        SegmentedStrengthMeter(
-//            passwordStrengthObject = passwordStrengthObject,
-//            modifier = Modifier,
-//            showLabel = false
-//        )
 
         Spacer(Modifier.height(24.dp))
 
@@ -90,27 +85,6 @@ fun PasswordGeneratorCard(
 
 }
 
-@Composable
-fun PasswordLabelRow(
-    modifier: Modifier = Modifier,
-    passwordStrengthObject: PasswordStrengthObject
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Your Password",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = CARD_HEADING_ALPHA)
-        )
-//        StrengthBadge(
-//            passwordStrengthObject = passwordStrengthObject,
-//            modifier = Modifier
-//        )
-    }
-}
 
 @Composable
 fun CardHeading(

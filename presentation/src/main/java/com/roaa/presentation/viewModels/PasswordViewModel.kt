@@ -7,6 +7,7 @@ import com.roaa.domain.usecase.*
 import com.roaa.domain.usecase.GetRecentlyCopiedUseCase
 import com.roaa.domain.usecase.RecordPasswordCopiedUseCase
 import com.roaa.presentation.utils.PasswordInfoUiState
+import com.roaa.presentation.utils.calculatePasswordStrengthScore
 import com.roaa.presentation.utils.formEditor.EditorMode
 import com.roaa.presentation.utils.models.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -87,35 +88,6 @@ class PasswordViewModel @Inject constructor(
      */
     fun deletePasswordById(passwordId: String) = viewModelScope.launch {
         deletePasswordById.invoke(passwordId)
-    }
-
-    /**
-     * Method to create an entry in database of password.
-     */
-    fun addPassword(
-        serviceName: String,
-        domainName: String,
-        username: String,
-        password: String,
-        logoUrl: String,
-        websiteUrl: String,
-        notes: String,
-        strength: Float,
-        serviceType: ServiceType
-    ) {
-        viewModelScope.launch {
-            addPassword.invoke(
-                serviceName = serviceName,
-                domainName = domainName,
-                username = username,
-                logoUrl = logoUrl,
-                password = password,
-                websiteUrl = websiteUrl,
-                notes = notes,
-                strength = strength,
-                serviceType = serviceType
-            )
-        }
     }
 
     /**
@@ -209,7 +181,7 @@ class PasswordViewModel @Inject constructor(
             notes = form.notes,
             //TODO
             websiteUrl = "",
-            strength = form.passwordStrength,
+            strength = calculatePasswordStrengthScore(form.password),
             serviceType = form.serviceType
         )
     }
@@ -223,7 +195,7 @@ class PasswordViewModel @Inject constructor(
                 username = form.username,
                 password = form.password,
                 notes = form.notes,
-                strength = form.passwordStrength
+                strength = calculatePasswordStrengthScore(form.password)
             ))
         )
     }

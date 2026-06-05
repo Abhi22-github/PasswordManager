@@ -139,7 +139,6 @@ private fun PasswordGenerateScreenContent(
         Spacer(Modifier.height(8.dp))
 
         CardBackgroundStandard() {
-            //  CardHeading(cardTitle = stringResource(R.string.generator_length))
             IntSlider(
                 label = stringResource(R.string.generator_length),
                 message = stringResource(R.string.generator_length_message),
@@ -152,7 +151,6 @@ private fun PasswordGenerateScreenContent(
         Spacer(Modifier.height(8.dp))
 
         CardBackgroundStandard() {
-            //  CardHeading(cardTitle = stringResource(R.string.generator_include))
             IncludeContentRow(
                 rowTitle = stringResource(R.string.generator_uppercase),
                 rowDescription = stringResource(R.string.generator_uppercase_description),
@@ -231,7 +229,7 @@ private fun IntSlider(
                 )
                 Text(
                     text = message,
-                    style = MaterialTheme.typography.labelLarge,
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Medium),
                     color = MaterialTheme.colorScheme.onSurface.copy(0.4f)
                 )
             }
@@ -242,7 +240,7 @@ private fun IntSlider(
                     .aspectRatio(1f)
                     .clip(MorphPolygonShape(morph, animatedProgress.value))
                     .background(
-                        MaterialTheme.colorScheme.surfaceContainer,
+                        MaterialTheme.colorScheme.tertiaryContainer,
                     ),
                 contentAlignment = Alignment.Center,
             ) {

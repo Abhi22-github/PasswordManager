@@ -81,9 +81,6 @@ private fun DashBoardScreenContent(
 
     Column(modifier = modifier.fillMaxSize()) {
         DashBoardTopAppBar()
-//        Spacer(modifier = Modifier.height(EightDp))
-
-        // null = loading, true = empty, false = has items
         AnimatedContent(
             targetState = credentials?.isEmpty(),
             transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(200)) },
@@ -130,6 +127,7 @@ private fun DashBoardScreenContent(
                                 items = recentlyCopied,
                                 onItemClick = { id -> onAction(DashboardActions.OnCardClicked(id)) }
                             )
+                            Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
 
@@ -670,8 +668,7 @@ private fun SectionHeader(
     )
 }
 
-private val RecentItemSize = 68.dp
-private val RecentItemRadius = 16.dp
+private val RecentItemSize = 78.dp
 
 @Composable
 private fun RecentlyCopiedSection(
@@ -681,9 +678,8 @@ private fun RecentlyCopiedSection(
 ) {
     Column(modifier = modifier.padding(bottom = SectionSpacing)) {
         Text(
-            text = "Recently Copied",
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.SemiBold,
+            text = "Recent",
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = EightDp)
         )
@@ -712,7 +708,7 @@ private fun RecentlyCopiedItem(
         Card(
             onClick = onClick,
             modifier = Modifier.size(RecentItemSize),
-            shape = MaterialShapes.Pill.toShape(),
+            shape = MaterialShapes.Square.toShape(),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer
             )
@@ -766,10 +762,11 @@ private fun RecentlyCopiedItem(
         Spacer(Modifier.height(4.dp))
         Text(
             text = credentials.serviceName,
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.titleSmall,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.width(RecentItemSize)
         )
     }

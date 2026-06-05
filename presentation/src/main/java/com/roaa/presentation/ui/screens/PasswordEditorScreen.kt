@@ -65,8 +65,7 @@ fun PasswordEditorScreen(
     val context = LocalContext.current
     val queryUiState by brandInfoViewModel.queryUiState.collectAsStateWithLifecycle()
 
-    DisposableEffect(Unit) {
-        passwordViewModel.resetEditorState()
+    DisposableEffect(editingId, prefilledPassword) {
         passwordViewModel.initialize(editingId, prefilledPassword)
         onDispose {
             passwordViewModel.resetEditorState()
@@ -138,9 +137,6 @@ private fun PasswordEditorScreenContent(
 
     val passwordStrengthObject by remember(form.password) {
         derivedStateOf { calculatePasswordStrength(form.password) }
-    }
-    LaunchedEffect(passwordStrengthObject, onFormChange) {
-        onFormChange(form.copy(passwordStrength = passwordStrengthObject.passwordScore))
     }
 
     var fieldSize by remember { mutableStateOf(IntSize.Zero) }
@@ -255,7 +251,12 @@ private fun PasswordEditorScreenContent(
                             selectedApp = it,
                             removeSelectedApp = {
                                 selectedApp = null
-                                onFormChange(form.copy(serviceName = "", serviceType = ServiceType.WEBSITE))
+                                onFormChange(
+                                    form.copy(
+                                        serviceName = "",
+                                        serviceType = ServiceType.WEBSITE
+                                    )
+                                )
                             }
                         )
                     }

@@ -156,7 +156,7 @@ val colorEditor
     @Composable
     @ReadOnlyComposable
     get() = combineColors(
-        MaterialTheme.colorScheme.surface,
+        MaterialTheme.colorScheme.surfaceContainerLowest,
         MaterialTheme.colorScheme.surfaceVariant,
         0.90F,
     )
