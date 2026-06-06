@@ -2,19 +2,23 @@ package com.roaa.presentation.ui.screens
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.roaa.domain.model.Credentials
-import com.roaa.domain.model.ServiceType
+import com.roaa.domain.model.*
+import com.roaa.presentation.R
 import com.roaa.presentation.ui.components.appBar.GeneralTopAppBar
-import com.roaa.presentation.ui.components.cards.*
-import com.roaa.presentation.utils.calculatePasswordStrength
-import com.roaa.presentation.utils.rememberPasswordClipboard
+import com.roaa.presentation.ui.components.cards.PasswordInfoCard
+import com.roaa.presentation.ui.components.inputs.LabeledTextField
+import com.roaa.presentation.utils.*
 import com.roaa.presentation.viewModels.PasswordViewModel
 
 private val ScreenHorizontalPadding = 16.dp
@@ -68,17 +72,12 @@ private fun PasswordInfoScreenContent(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(
-                horizontal = ScreenHorizontalPadding,
-                vertical = ScreenVerticalPadding
-            )
     ) {
         GeneralTopAppBar(onBackButtonClicked = onBackClick)
-        Spacer(Modifier.height(TopBarToContentSpacing))
 
         when {
             isLoading || details == null -> LoadingPlaceholder()
-            else -> LoadedContent(
+            else -> NewPasswordInfoContent(
                 details = details,
                 logoImage = logoImage,
                 onEditClick = onEditClick,
@@ -86,6 +85,43 @@ private fun PasswordInfoScreenContent(
                 onDeleteClick = onDeleteClick
             )
         }
+    }
+}
+
+@Composable
+fun NewPasswordInfoContent(
+    details: Credentials,
+    logoImage: String?,
+    onEditClick: () -> Unit,
+    onShareClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        LabeledTextField(
+            label = stringResource(R.string.editor_label_service),
+            value = details.serviceName,
+            shape = RoundedCornerShape(24.dp),
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        LabeledTextField(
+            label = stringResource(R.string.editor_label_username),
+            value = details.username,
+            shape = RoundedCornerShape(topEnd = 24.dp, topStart = 24.dp),
+            shouldShowCopyButton = true
+        )
+        LabeledTextField(
+            label = stringResource(R.string.editor_label_password),
+            value = details.password,
+            shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp),
+            shouldShowCopyButton = true
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        LabeledTextField(
+            label = stringResource(R.string.editor_label_notes),
+            value = details.notes ?: "",
+            shape = RoundedCornerShape(24.dp),
+        )
     }
 }
 
@@ -102,7 +138,7 @@ private fun LoadedContent(
     val passwordStrengthObject = calculatePasswordStrength(details.password)
 
     Column(modifier = modifier) {
-        PasswordStrengthCard(progress = passwordStrengthObject.passwordScore)
+
 
         PasswordInfoCard(
             serviceName = details.serviceName,

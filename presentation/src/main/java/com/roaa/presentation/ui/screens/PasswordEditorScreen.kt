@@ -27,7 +27,7 @@ import com.roaa.presentation.R
 import com.roaa.presentation.ui.components.appBar.GeneralTopAppBar
 import com.roaa.presentation.ui.components.bottomSheets.AppPickerBottomSheet
 import com.roaa.presentation.ui.components.buttons.*
-import com.roaa.presentation.ui.components.inputs.LabeledTextField
+import com.roaa.presentation.ui.components.inputs.LabeledTextInputField
 import com.roaa.presentation.ui.components.popup.AutoCompletePopup
 import com.roaa.presentation.ui.components.progress.SegmentedStrengthMeter
 import com.roaa.presentation.ui.theme.ToolbarBottomGap
@@ -42,7 +42,7 @@ private val NotesTopExtraSpacing = 6.dp
 private val CopyButtonSpacing = 6.dp
 private val StrengthBarSpacing = 12.dp
 private const val COPY_TRANSITION_MS = 300
-private val InputCornerRadius = 20.dp
+private val InputCornerRadius = 24.dp
 private val SectionSpacing = 24.dp
 private val CloseTextFieldSpacing = 4.dp
 private val margin_four = 4.dp
@@ -175,7 +175,7 @@ private fun PasswordEditorScreenContent(
             Spacer(Modifier.height(SectionSpacing))
 
             Box {
-                LabeledTextField(
+                LabeledTextInputField(
                     label = stringResource(R.string.bookmark_label_service),
                     placeholder = stringResource(R.string.bookmark_placeholder_service),
                     value = form.serviceName,
@@ -266,7 +266,7 @@ private fun PasswordEditorScreenContent(
 
             Spacer(Modifier.height(SectionSpacing))
 
-            LabeledTextField(
+            LabeledTextInputField(
                 label = stringResource(R.string.editor_label_username),
                 placeholder = stringResource(R.string.editor_placeholder_username),
                 value = form.username,
@@ -279,7 +279,7 @@ private fun PasswordEditorScreenContent(
             )
             Spacer(Modifier.height(CloseTextFieldSpacing))
             Row(modifier = Modifier.height(IntrinsicSize.Max)) {
-                LabeledTextField(
+                LabeledTextInputField(
                     modifier = Modifier.weight(0.8f),
                     label = stringResource(R.string.editor_label_password),
                     placeholder = stringResource(R.string.editor_placeholder_password),
@@ -327,7 +327,7 @@ private fun PasswordEditorScreenContent(
             )
 
             Spacer(Modifier.height(SectionSpacing))
-            LabeledTextField(
+            LabeledTextInputField(
                 label = stringResource(R.string.editor_label_notes),
                 placeholder = stringResource(R.string.editor_placeholder_notes),
                 value = form.notes ?: "",

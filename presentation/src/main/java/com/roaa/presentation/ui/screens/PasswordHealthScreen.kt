@@ -260,13 +260,13 @@ private fun PasswordHealthListItem(
 ) {
     val context = LocalContext.current
     Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        shape = RoundedCornerShape(15.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        shape = RoundedCornerShape(20.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 10.dp, horizontal = 10.dp),
+                .padding(vertical = 10.dp, horizontal = 15.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             when (credentials.serviceType) {
@@ -310,8 +310,7 @@ private fun PasswordHealthListItem(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = credentials.serviceName,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.titleSmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -332,7 +331,7 @@ private fun PasswordHealthListItem(
             TextButton(onClick = onEditClick) {
                 Text(
                     text = "Change",
-                    style = MaterialTheme.typography.labelMedium
+                    style = MaterialTheme.typography.titleSmall
                 )
             }
         }

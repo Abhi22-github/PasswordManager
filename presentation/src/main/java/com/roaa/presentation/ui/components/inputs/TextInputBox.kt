@@ -9,7 +9,9 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,7 +42,7 @@ fun TextInputBox(
         value = value,
         onValueChange = onValueChange,
         textStyle = MaterialTheme.typography.titleMedium.copy(
-            color = if(isDisable) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f) else MaterialTheme.colorScheme.onSurface
+            color = if (isDisable) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f) else MaterialTheme.colorScheme.onSurface
         ),
         cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
         singleLine = singleLine,
@@ -94,7 +96,7 @@ fun TextInputBox(
 }
 
 @Composable
-fun LabeledTextField(
+fun LabeledTextInputField(
     label: String,
     placeholder: String,
     value: String,
@@ -139,6 +141,52 @@ fun LabeledTextField(
 }
 
 @Composable
+fun LabeledTextField(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(InputCornerRadius),
+    shouldShowCopyButton: Boolean = false
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = shape,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
+        )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp).weight(0.8f)) {
+                FieldLabel(text = label)
+                Spacer(Modifier.height(LabelToInputSpacing))
+                Text(
+                    text = value,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+            if (shouldShowCopyButton) {
+                Spacer(modifier = Modifier.width(8.dp))
+                IconButton(
+                    onClick = {},
+                    shape = MaterialShapes.Square.toShape(),
+                    modifier = Modifier.aspectRatio(1f).weight(0.2f)
+                ) {
+                    Icon(
+                        painter = painterResource(com.roaa.presentation.R.drawable.copy_icon),
+                        contentDescription = null
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
 private fun FieldLabel(text: String) {
     Text(
         text = text,
@@ -149,8 +197,8 @@ private fun FieldLabel(text: String) {
 
 @Preview
 @Composable
-private fun LabeledTextFieldPreviewForEmail() {
-    LabeledTextField(
+private fun LabeledTextInputFieldPreviewForEmail() {
+    LabeledTextInputField(
         value = "email",
         onValueChange = {},
         placeholder = "Email",
@@ -163,8 +211,8 @@ private fun LabeledTextFieldPreviewForEmail() {
 
 @Preview
 @Composable
-private fun LabeledTextFieldPreviewForPassword() {
-    LabeledTextField(
+private fun LabeledTextInputFieldPreviewForPassword() {
+    LabeledTextInputField(
         value = "Password",
         onValueChange = {},
         placeholder = "Password",
